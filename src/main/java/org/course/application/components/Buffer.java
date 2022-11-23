@@ -39,7 +39,7 @@ public class Buffer {
       final int oldestInsertIndex = (insertIndex == 0) ? capacity - 1 : insertIndex - 1;
       Order canceledOrder = stack.get(oldestInsertIndex);
       stack.set(oldestInsertIndex, order);
-      Controller.stat.taskCanceled(canceledOrder.clientId(),
+      Controller.statistics.taskCanceled(canceledOrder.clientId(),
         order.startTime() - canceledOrder.startTime());
       return;
     }
@@ -53,23 +53,41 @@ public class Buffer {
 
   public Order getOrder() {
     if (isEmpty()) {
-      throw new RuntimeException("Buffer is empty");
+      return null;
     }
-    if (stack.get(fetchIndex) == null) {
+    if (stack.get(fetchIndex) != null) {
+      final Order order = stack.get(fetchIndex);
+      stack.set(fetchIndex, null);
       fetchIndex++;
       if (fetchIndex == capacity) {
         fetchIndex = 0;
       }
-      return null;
+      size--;
+      return order;
     }
-    final Order order = stack.get(fetchIndex);
-    stack.set(fetchIndex, null);
+    Order order;
+    final int currentIndex = fetchIndex;
     fetchIndex++;
     if (fetchIndex == capacity) {
       fetchIndex = 0;
     }
-    size--;
-    return order;
+    while (fetchIndex != currentIndex) {
+      if (stack.get(fetchIndex) != null) {
+        order = stack.get(fetchIndex);
+        stack.set(fetchIndex, null);
+        fetchIndex++;
+        if (fetchIndex == capacity) {
+          fetchIndex = 0;
+        }
+        size--;
+        return order;
+      }
+      fetchIndex++;
+      if (fetchIndex == capacity) {
+        fetchIndex = 0;
+      }
+    }
+    return null;
   }
 }
 
