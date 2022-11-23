@@ -25,8 +25,4 @@ public class Terminal {
   public double getNextOrderGenerationTime() {
     return (-1.0 / lambda) * Math.log(Math.random());
   }
-
-  public boolean isExistOrders() {
-    return !buffer.isEmpty();
-  }
 }

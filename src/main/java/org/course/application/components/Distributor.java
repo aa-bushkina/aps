@@ -33,4 +33,8 @@ public class Distributor {
     return Optional.ofNullable(buffer.getOrder());
   }
 
+  public boolean isExistOrdersInBuffer() {
+    return !buffer.isEmpty();
+  }
+
 }
