@@ -22,13 +22,6 @@ public class RestaurantDevice {
     this.currentOrder = null;
   }
 
-  /*public double setNextOrder(Order order, double currentTime) {
-    taskStartTime = currentTime;
-    currentOrder = order;
-    double i = (StatController.maximum - StatController.minimum) / maxRand;
-    return StatController.minimum + generator.nextDouble() * i;
-  }*/
-
   public boolean isFree() {
     return (currentOrder == null);
   }
