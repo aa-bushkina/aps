@@ -14,7 +14,6 @@ public class Client {
   }
 
   public Order generateOrder(final double currentTime) {
-    ordersCount++;
-    return new Order(clientId, String.valueOf(clientId) + '-' + ordersCount, currentTime);
+    return new Order(clientId, String.valueOf(clientId) + '-' + ordersCount++, currentTime);
   }
 }
