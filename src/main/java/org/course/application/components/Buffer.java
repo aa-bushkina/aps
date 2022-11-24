@@ -70,20 +70,16 @@ public class Buffer {
   }
 
   public void addOrder(@NotNull final Order order) {
-    System.out.println("Indexes " + countTimeInBuffer);
     if (isFull()) {
       incrementIndexValue();
       final int oldestInsertIndex = findOldestIndexOfElement();
       Order canceledOrder = stack.get(oldestInsertIndex);
       stack.set(oldestInsertIndex, order);
       addNewIndexValue(oldestInsertIndex);
-      System.out.println("Cancel " + canceledOrder.orderId());
-      System.out.println("Add " + order.orderId());
       Controller.statistics.taskCanceled(canceledOrder.clientId(),
         order.startTime() - canceledOrder.startTime());
       return;
     }
-    System.out.println("Add " + order.orderId());
     incrementIndexValue();
     stack.set(insertIndex, order);
     addNewIndexValue(insertIndex);
@@ -95,7 +91,6 @@ public class Buffer {
   }
 
   public Order getOrder() {
-    System.out.println("Indexes " + countTimeInBuffer);
     if (isEmpty()) {
       return null;
     }
@@ -108,7 +103,6 @@ public class Buffer {
         fetchIndex = 0;
       }
       size--;
-      System.out.println("Get " + order.orderId());
       return order;
     }
     Order order;
@@ -127,7 +121,6 @@ public class Buffer {
           fetchIndex = 0;
         }
         size--;
-        System.out.println("Get " + order.orderId());
         return order;
       }
       fetchIndex++;
