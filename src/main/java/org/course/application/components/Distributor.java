@@ -25,8 +25,7 @@ public class Distributor {
   }
 
   public double getDeviceReleaseTime() {
-    double i = (StatController.maximum - StatController.minimum) / maxRand;
-    return StatController.minimum + generator.nextDouble() * i;
+    return StatController.minimum + generator.nextDouble() * (StatController.maximum - StatController.minimum);
   }
 
   public Optional<Order> getOrderFromBuffer() {
