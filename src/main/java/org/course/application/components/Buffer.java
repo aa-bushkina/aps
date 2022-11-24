@@ -15,14 +15,49 @@ public class Buffer {
   private int fetchIndex;
   private final int capacity;
   private int size;
+  ArrayList<Integer> countTimeInBuffer;
+
+  private void incrementIndexValue() {
+    for (int i = 0; i < countTimeInBuffer.size(); i++) {
+      if (countTimeInBuffer.get(i) != 0) {
+        countTimeInBuffer.set(i, countTimeInBuffer.get(i) + 1);
+      }
+    }
+  }
+
+  private void clearIndexValue(final int index) {
+    countTimeInBuffer.set(index, 0);
+  }
+
+  private void addNewIndexValue(final int index) {
+    countTimeInBuffer.set(index, 1);
+  }
+
+  private int findOldestIndexOfElement() {
+    int maxIndex = -1;
+    int maxValue = -1;
+    for (int i = 0; i < countTimeInBuffer.size(); i++) {
+      int times = countTimeInBuffer.get(i);
+      if (times > maxValue) {
+        maxValue = times;
+        maxIndex = i;
+      }
+    }
+    return maxIndex;
+  }
 
   public Buffer(final int capacity) {
     this.capacity = capacity;
     this.size = 0;
     this.insertIndex = 0;
+    this.fetchIndex = 0;
     stack = new ArrayList<>(capacity);
     for (int i = 0; i < capacity; i++) {
       stack.add(null);
+    }
+    countTimeInBuffer = new ArrayList<>(capacity);
+    for (int i = 0; i < capacity; i++) {
+      countTimeInBuffer.add(0);
     }
   }
 
@@ -35,15 +70,23 @@ public class Buffer {
   }
 
   public void addOrder(@NotNull final Order order) {
+    System.out.println("Indexes " + countTimeInBuffer);
     if (isFull()) {
-      final int oldestInsertIndex = (insertIndex == 0) ? capacity - 1 : insertIndex - 1;
+      incrementIndexValue();
+      final int oldestInsertIndex = findOldestIndexOfElement();
       Order canceledOrder = stack.get(oldestInsertIndex);
       stack.set(oldestInsertIndex, order);
+      addNewIndexValue(oldestInsertIndex);
+      System.out.println("Cancel " + canceledOrder.orderId());
+      System.out.println("Add " + order.orderId());
       Controller.statistics.taskCanceled(canceledOrder.clientId(),
         order.startTime() - canceledOrder.startTime());
       return;
     }
+    System.out.println("Add " + order.orderId());
+    incrementIndexValue();
     stack.set(insertIndex, order);
+    addNewIndexValue(insertIndex);
     insertIndex++;
     if (insertIndex == capacity) {
       insertIndex = 0;
@@ -52,17 +95,20 @@ public class Buffer {
   }
 
   public Order getOrder() {
+    System.out.println("Indexes " + countTimeInBuffer);
     if (isEmpty()) {
       return null;
     }
     if (stack.get(fetchIndex) != null) {
       final Order order = stack.get(fetchIndex);
       stack.set(fetchIndex, null);
+      clearIndexValue(fetchIndex);
       fetchIndex++;
       if (fetchIndex == capacity) {
         fetchIndex = 0;
       }
       size--;
+      System.out.println("Get " + order.orderId());
       return order;
     }
     Order order;
@@ -75,11 +121,13 @@ public class Buffer {
       if (stack.get(fetchIndex) != null) {
         order = stack.get(fetchIndex);
         stack.set(fetchIndex, null);
+        clearIndexValue(fetchIndex);
         fetchIndex++;
         if (fetchIndex == capacity) {
           fetchIndex = 0;
         }
         size--;
+        System.out.println("Get " + order.orderId());
         return order;
       }
       fetchIndex++;
