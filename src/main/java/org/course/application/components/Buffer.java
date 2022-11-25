@@ -43,6 +43,9 @@ public class Buffer {
     System.out.println("Queue " + indexesQueue);
     System.out.println("Insert index " + insertIndex);
     if (isFull()) {
+      if (indexesQueue.isEmpty()) {
+        throw new RuntimeException("Indexes Queue can't be empty!");
+      }
       insertIndex = indexesQueue.pollFirst();
       Order canceledOrder = orders.get(insertIndex);
       makeStatistics(canceledOrder, order);
@@ -73,7 +76,7 @@ public class Buffer {
     System.out.println("Queue " + indexesQueue);
     System.out.println("Fetch index " + fetchIndex);
     if (isEmpty()) {
-      return null;
+      throw new RuntimeException("Buffer is empty!");
     }
     if (orders.get(fetchIndex) != null) {
       final Order order = orders.get(fetchIndex);
@@ -115,7 +118,7 @@ public class Buffer {
         fetchIndex = 0;
       }
     }
-    return null;
+    throw new RuntimeException("Buffer is empty!");
   }
 
   private void makeStatistics(@NotNull final Order canceledOrder, @NotNull final Order order) {
