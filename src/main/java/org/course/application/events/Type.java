@@ -1,4 +1,4 @@
-package org.course.utils;
+package org.course.application.events;
 
 public enum Type {
   Generated,

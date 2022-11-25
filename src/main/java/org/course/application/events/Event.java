@@ -1,7 +1,8 @@
-package org.course.utils;
+package org.course.application.events;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.jetbrains.annotations.NotNull;
 
 @Getter
 @Setter
@@ -10,19 +11,19 @@ public class Event {
   public double eventTime;
   public int id;
 
-  public Event(Type type, double time, int id) {
+  public Event(@NotNull final Type type, final double time, final int id) {
     this.eventType = type;
     this.eventTime = time;
     this.id = id;
   }
 
-  public Event(Type type, double time) {
+  public Event(@NotNull final Type type, final double time) {
     this.eventType = type;
     this.eventTime = time;
     this.id = -1;
   }
 
-  public static int compare(Event l, Event r) {
+  public static int compare(@NotNull final Event l, @NotNull final Event r) {
     if (l.eventTime < r.eventTime) {
       return -1;
     } else if (l.eventTime > r.eventTime) {
