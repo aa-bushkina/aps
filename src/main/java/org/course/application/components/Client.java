@@ -3,6 +3,8 @@ package org.course.application.components;
 import lombok.Getter;
 import org.course.application.Order;
 
+import static org.course.statistic.StatController.lambda;
+
 @Getter
 public class Client {
   final private int clientId;
@@ -11,6 +13,10 @@ public class Client {
   public Client(final int clientId) {
     this.clientId = clientId;
     ordersCount = 0;
+  }
+
+  public double getNextOrderGenerationTime() {
+    return (-1.0 / lambda) * Math.log(Math.random());
   }
 
   public Order generateOrder(final double currentTime) {

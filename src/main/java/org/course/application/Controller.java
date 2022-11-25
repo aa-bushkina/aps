@@ -7,6 +7,7 @@ import org.course.application.events.Type;
 import org.course.statistic.StatController;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 public class Controller {
@@ -22,20 +23,10 @@ public class Controller {
   private final ArrayList<RestaurantDevice> devices;
   private ArrayList<Event> events;
 
-/*  private void findFreeDeviceIndex() {
-    while (!devices.get(currentIndex).isFree()) {
-      currentIndex++;
-      if (currentIndex == statistics.getDevicesCount()) {
-        currentIndex = 0;
-        return;
-      }
-    }
-  }*/
-
   private void initEvents() {
     events = new ArrayList<>();
     for (int i = 0; i < statistics.getClientsCount(); i++) {
-      events.add(new Event(Type.Generated, terminal.getNextOrderGenerationTime(), i));
+      events.add(new Event(Type.Generated, clients.get(i).getNextOrderGenerationTime(), i));
     }
     if (events.size() > 0) {
       events.sort(Event::compare);
@@ -48,14 +39,14 @@ public class Controller {
     buffer = new Buffer(statistics.getBufferSize());
     devices = new ArrayList<>(statistics.getDevicesCount());
     for (int i = 0; i < statistics.getDevicesCount(); i++) {
-      devices.add(new RestaurantDevice(i));
+      devices.add(new RestaurantDevice(i, statistics));
     }
     distributor = new Distributor(buffer, devices, statistics);
     clients = new ArrayList<>(statistics.getClientsCount());
     for (int i = 0; i < statistics.getClientsCount(); i++) {
       clients.add(new Client(i));
     }
-    terminal = new Terminal(buffer, clients);
+    terminal = new Terminal(buffer, clients, statistics);
     initEvents();
   }
 
@@ -73,13 +64,9 @@ public class Controller {
     currentTime = currentEvent.eventTime;
     if (currentType == Type.Generated) {
       if (statistics.getTotalOrdersCount() < requiredOrdersCount) {
-        terminal.addOrderToBuffer(clients.get(currentId).generateOrder(currentTime));
-        events.add(new Event(Type.Generated,
-          currentTime + terminal.getNextOrderGenerationTime(),
-          currentId));
-        events.add(new Event(Type.Unbuffered, currentTime));
-        statistics.orderGenerated(currentId);
-        if (events.size() > 0) {
+        List<Event> newEvents = terminal.sendOrderToBuffer(currentId, currentTime);
+        if (!events.isEmpty()) {
+          events.addAll(newEvents);
           events.sort(Event::compare);
         }
       }
@@ -90,17 +77,9 @@ public class Controller {
         events.sort(Event::compare);
       }
     } else if (currentType == Type.Completed) {
-      RestaurantDevice currentDevice = devices.get(currentId);
-
-      if (currentDevice.getCurrentOrder() != null) {
-        statistics.taskCompleted(currentDevice.getCurrentOrder().clientId(),
-          currentTime - currentDevice.getCurrentOrder().startTime(),
-          currentTime - currentDevice.getOrderStartTime());
-        devices.get(currentId).setCurrentOrder(null);
-        devices.get(currentId).setOrderStartTime(currentTime);
-        events.add(new Event(Type.Unbuffered, currentTime));
-        events.sort(Event::compare);
-      }
+      devices.get(currentId).release(currentTime);
+      events.add(new Event(Type.Unbuffered, currentTime));
+      events.sort(Event::compare);
     }
     return currentEvent;
   }

@@ -1,28 +1,34 @@
 package org.course.application.components;
 
-import org.course.application.Order;
+import org.course.application.events.Event;
+import org.course.application.events.Type;
+import org.course.statistic.StatController;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
-
-import static org.course.statistic.StatController.lambda;
 
 public class Terminal {
   @NotNull
   final private Buffer buffer;
   @NotNull
   List<Client> clients;
+  @NotNull
+  private final StatController statistics;
 
-  public Terminal(@NotNull final Buffer buffer, @NotNull final List<Client> clients) {
+  public Terminal(@NotNull final Buffer buffer,
+                  @NotNull final List<Client> clients,
+                  @NotNull final StatController statistics) {
     this.buffer = buffer;
     this.clients = clients;
+    this.statistics = statistics;
   }
 
-  public void addOrderToBuffer(@NotNull final Order order) {
-    buffer.addOrder(order);
-  }
-
-  public double getNextOrderGenerationTime() {
-    return (-1.0 / lambda) * Math.log(Math.random());
+  public List<Event> sendOrderToBuffer(final int currentId, final double currentTime) {
+    buffer.addOrder(clients.get(currentId).generateOrder(currentTime));
+    List<Event> events = List.of(
+      new Event(Type.Generated, currentTime + clients.get(currentId).getNextOrderGenerationTime(), currentId),
+      new Event(Type.Unbuffered, currentTime));
+    statistics.orderGenerated(currentId);
+    return events;
   }
 }

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.course.application.Order;
 import org.course.statistic.StatController;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
 
@@ -13,11 +14,14 @@ public class RestaurantDevice {
   private int deviceId;
   private Order currentOrder;
   private double orderStartTime;
+  private final StatController statistics;
 
-  public RestaurantDevice(final int deviceId) {
+  public RestaurantDevice(final int deviceId,
+                          @NotNull final StatController statistics) {
     this.deviceId = deviceId;
     this.orderStartTime = 0;
     this.currentOrder = null;
+    this.statistics = statistics;
   }
 
   public double getReleaseTime() {
@@ -27,5 +31,15 @@ public class RestaurantDevice {
 
   public boolean isFree() {
     return (currentOrder == null);
+  }
+
+  public void release(final double currentTime) {
+    if (currentOrder != null) {
+      statistics.taskCompleted(currentOrder.clientId(),
+        currentTime - orderStartTime,
+        currentTime - orderStartTime);
+      currentOrder = null;
+      orderStartTime = currentTime;
+    }
   }
 }
