@@ -1,5 +1,6 @@
 package org.course.application.components;
 
+import org.course.application.Order;
 import org.course.application.events.Event;
 import org.course.application.events.Type;
 import org.course.statistic.Statistics;
@@ -23,8 +24,12 @@ public class Terminal {
     this.statistics = statistics;
   }
 
-  public List<Event> sendOrderToBuffer(final int currentId, final double currentTime) {
-    buffer.addOrder(clients.get(currentId).generateOrder(currentTime));
+  private Order receiveOrder(final int currentId, final double currentTime) {
+    return clients.get(currentId).generateOrder(currentTime);
+  }
+
+  public List<Event> putOrderToBuffer(final int currentId, final double currentTime) {
+    buffer.addOrder(receiveOrder(currentId, currentTime));
     List<Event> events = List.of(
       new Event(Type.Generated, currentTime + clients.get(currentId).getNextOrderGenerationTime(), currentId),
       new Event(Type.Unbuffered, currentTime));

@@ -12,13 +12,13 @@ import java.util.List;
 @Getter
 public class Controller {
   public static Statistics statistics = Statistics.getInstance();
-  private final int requiredOrdersCount = Statistics.countOfRequiredOrders;
+  private final int ordersCount = Statistics.countOfOrders;
 
   private final Buffer buffer;
   private final Terminal terminal;
   private final Distributor distributor;
   private final ArrayList<Client> clients;
-  private final ArrayList<RestaurantDevice> devices;
+  private final ArrayList<Device> devices;
   private ArrayList<Event> events;
 
   private void initEvents() {
@@ -35,7 +35,7 @@ public class Controller {
     buffer = new Buffer(statistics.getBufferSize());
     devices = new ArrayList<>(statistics.getDevicesCount());
     for (int i = 0; i < statistics.getDevicesCount(); i++) {
-      devices.add(new RestaurantDevice(i, statistics));
+      devices.add(new Device(i, statistics));
     }
     distributor = new Distributor(buffer, devices, statistics);
     clients = new ArrayList<>(statistics.getClientsCount());
@@ -59,8 +59,8 @@ public class Controller {
     final int currentId = currentEvent.id;
     final double currentTime = currentEvent.eventTime;
     if (currentType == Type.Generated) {
-      if (statistics.getTotalOrdersCount() < requiredOrdersCount) {
-        List<Event> newEvents = terminal.sendOrderToBuffer(currentId, currentTime);
+      if (statistics.getTotalOrdersCount() < ordersCount) {
+        List<Event> newEvents = terminal.putOrderToBuffer(currentId, currentTime);
         if (!events.isEmpty()) {
           events.addAll(newEvents);
           events.sort(Event::compare);

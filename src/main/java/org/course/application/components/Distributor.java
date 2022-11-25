@@ -11,13 +11,13 @@ import java.util.List;
 
 @Getter
 public class Distributor {
-  private final List<RestaurantDevice> devices;
+  private final List<Device> devices;
   private final Buffer buffer;
   private int currentIndex;
   private final Statistics statistics;
 
   public Distributor(@NotNull final Buffer buffer,
-                     @NotNull final List<RestaurantDevice> devices,
+                     @NotNull final List<Device> devices,
                      @NotNull final Statistics statistics) {
     this.buffer = buffer;
     this.devices = devices;
@@ -26,7 +26,7 @@ public class Distributor {
 
   public Event sendOrderToDevice(final double currentTime) {
     findFreeDeviceIndex();
-    RestaurantDevice currentDevice = devices.get(currentIndex);
+    Device currentDevice = devices.get(currentIndex);
     if (currentDevice.isFree() && !buffer.isEmpty()) {
       final Order order = buffer.getOrder();
       devices.get(currentIndex).setCurrentOrder(order);

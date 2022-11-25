@@ -10,14 +10,14 @@ import java.util.Random;
 
 @Getter
 @Setter
-public class RestaurantDevice {
+public class Device {
   private int deviceId;
   private Order currentOrder;
   private double orderStartTime;
   private final Statistics statistics;
 
-  public RestaurantDevice(final int deviceId,
-                          @NotNull final Statistics statistics) {
+  public Device(final int deviceId,
+                @NotNull final Statistics statistics) {
     this.deviceId = deviceId;
     this.orderStartTime = 0;
     this.currentOrder = null;
