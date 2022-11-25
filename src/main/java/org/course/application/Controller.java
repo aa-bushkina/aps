@@ -13,6 +13,7 @@ import java.util.List;
 public class Controller {
   public static Statistics statistics = Statistics.getInstance();
   private final int ordersCount = Statistics.countOfOrders;
+  private double currentTime;
 
   private final Buffer buffer;
   private final Terminal terminal;
@@ -32,6 +33,7 @@ public class Controller {
   }
 
   public Controller() {
+    currentTime = 0;
     buffer = new Buffer(statistics.getBufferSize());
     devices = new ArrayList<>(statistics.getDevicesCount());
     for (int i = 0; i < statistics.getDevicesCount(); i++) {
@@ -54,10 +56,9 @@ public class Controller {
 
   public Event stepMode() {
     final Event currentEvent = events.remove(0);
-    //System.out.println(currentEvent.eventTime + currentEvent.eventType.toString());
     final Type currentType = currentEvent.eventType;
     final int currentId = currentEvent.id;
-    final double currentTime = currentEvent.eventTime;
+    currentTime = currentEvent.eventTime;
     if (currentType == Type.Generated) {
       if (statistics.getTotalOrdersCount() < ordersCount) {
         List<Event> newEvents = terminal.putOrderToBuffer(currentId, currentTime);
