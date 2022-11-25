@@ -1,7 +1,6 @@
 package org.course.GUI.actions;
 
 import org.course.GUI.frames.ChooseModeFrame;
-import org.course.GUI.frames.StartFrame;
 import org.course.statistic.Statistics;
 import org.jetbrains.annotations.NotNull;
 
@@ -13,11 +12,11 @@ public class SetDataAction extends AbstractAction {
   @NotNull
   private final ArrayList<JTextField> startDataFields;
   @NotNull
-  private final StartFrame startFrame;
+  private final JFrame startFrame;
 
-  public SetDataAction(@NotNull final StartFrame startFrame) {
+  public SetDataAction(@NotNull final JFrame startFrame, @NotNull final ArrayList<JTextField> array) {
     this.startFrame = startFrame;
-    this.startDataFields = startFrame.getStartDataFields();
+    this.startDataFields = array;
   }
 
   @Override
@@ -33,7 +32,7 @@ public class SetDataAction extends AbstractAction {
   }
 
   private void createChooseFrame() {
-    startFrame.hide();
+    startFrame.setVisible(false);
     ChooseModeFrame modeFrame = new ChooseModeFrame();
     modeFrame.start();
   }

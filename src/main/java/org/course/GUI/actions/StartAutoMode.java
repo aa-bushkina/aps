@@ -1,7 +1,6 @@
 package org.course.GUI.actions;
 
 import org.course.GUI.frames.AutoModeFrame;
-import org.course.GUI.frames.ChooseModeFrame;
 import org.course.application.Controller;
 import org.jetbrains.annotations.NotNull;
 
@@ -10,9 +9,9 @@ import java.awt.event.ActionEvent;
 
 public class StartAutoMode extends AbstractAction {
   @NotNull
-  final private ChooseModeFrame chooseModeFrame;
+  final private JFrame chooseModeFrame;
 
-  public StartAutoMode(@NotNull final ChooseModeFrame frame) {
+  public StartAutoMode(@NotNull final JFrame frame) {
     this.chooseModeFrame = frame;
   }
 
@@ -20,7 +19,7 @@ public class StartAutoMode extends AbstractAction {
   public void actionPerformed(ActionEvent e) {
     Controller controller = new Controller();
     controller.autoMode();
-    chooseModeFrame.hide();
+    chooseModeFrame.setVisible(false);
     AutoModeFrame modeFrame = new AutoModeFrame();
     modeFrame.setStatistics(controller.getStatistics());
     modeFrame.start();

@@ -17,7 +17,7 @@ public class AutoModeFrame extends CustomFrame {
   }
 
   public void start() {
-    JFrame frame = createFrame("Auto mode");
+    currentFrame = createFrame("Auto mode");
     String[] columnNames = {"Tasks count", "Failure probability", "Total time in system",
       "Time in buffer", "Buffer dispersion", "Maintenance dispersion"};
 
@@ -36,10 +36,8 @@ public class AutoModeFrame extends CustomFrame {
 
     JScrollPane scroll = new JScrollPane(table);
     table.setPreferredScrollableViewportSize(new Dimension(700, 200));
-    frame.getContentPane().add(scroll);
-    frame.setSize(1000, 500);
-
-    this.currentFrame = frame;
-    this.revalidate();
+    currentFrame.getContentPane().add(scroll);
+    currentFrame.setSize(1000, 500);
+    currentFrame.revalidate();
   }
 }

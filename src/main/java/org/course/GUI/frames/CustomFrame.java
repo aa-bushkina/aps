@@ -9,14 +9,6 @@ public abstract class CustomFrame {
 
   protected JFrame currentFrame;
 
-  public void hide() {
-    currentFrame.setVisible(false);
-  }
-
-  public void revalidate() {
-    currentFrame.revalidate();
-  }
-
   public static JFrame createFrame(@NotNull final String title) {
     JFrame frame = new JFrame() {
     };

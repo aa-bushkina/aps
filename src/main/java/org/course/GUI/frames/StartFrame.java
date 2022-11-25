@@ -16,8 +16,8 @@ public class StartFrame extends CustomFrame {
 
     Box box = Box.createVerticalBox();
 
-    JFrame frame = createFrame("Parameters");
-    frame.add(panel);
+    currentFrame = createFrame("Parameters");
+    currentFrame.add(panel);
 
     JLabel label1 = new JLabel("Devices count");
     label1.setPreferredSize(new Dimension(100, 40));
@@ -83,7 +83,7 @@ public class StartFrame extends CustomFrame {
     startDataFields.add(text6);
     startDataFields.add(text7);
 
-    JButton button = new JButton(new SetDataAction(this));
+    JButton button = new JButton(new SetDataAction(currentFrame, startDataFields));
     button.setText("start");
     box.add(string1);
     box.add(string3);
@@ -94,7 +94,6 @@ public class StartFrame extends CustomFrame {
     box.add(Box.createVerticalStrut(25));
     box.add(button);
     panel.add(box);
-    this.currentFrame = frame;
-    this.revalidate();
+    currentFrame.revalidate();
   }
 }
