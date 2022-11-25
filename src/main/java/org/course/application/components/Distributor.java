@@ -4,7 +4,7 @@ import lombok.Getter;
 import org.course.application.Order;
 import org.course.application.events.Event;
 import org.course.application.events.Type;
-import org.course.statistic.StatController;
+import org.course.statistic.Statistics;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -14,11 +14,11 @@ public class Distributor {
   private final List<RestaurantDevice> devices;
   private final Buffer buffer;
   private int currentIndex;
-  private final StatController statistics;
+  private final Statistics statistics;
 
   public Distributor(@NotNull final Buffer buffer,
                      @NotNull final List<RestaurantDevice> devices,
-                     @NotNull final StatController statistics) {
+                     @NotNull final Statistics statistics) {
     this.buffer = buffer;
     this.devices = devices;
     this.statistics = statistics;

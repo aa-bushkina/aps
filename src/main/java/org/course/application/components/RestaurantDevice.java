@@ -3,7 +3,7 @@ package org.course.application.components;
 import lombok.Getter;
 import lombok.Setter;
 import org.course.application.Order;
-import org.course.statistic.StatController;
+import org.course.statistic.Statistics;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Random;
@@ -14,10 +14,10 @@ public class RestaurantDevice {
   private int deviceId;
   private Order currentOrder;
   private double orderStartTime;
-  private final StatController statistics;
+  private final Statistics statistics;
 
   public RestaurantDevice(final int deviceId,
-                          @NotNull final StatController statistics) {
+                          @NotNull final Statistics statistics) {
     this.deviceId = deviceId;
     this.orderStartTime = 0;
     this.currentOrder = null;
@@ -26,7 +26,7 @@ public class RestaurantDevice {
 
   public double getReleaseTime() {
     Random rand = new Random();
-    return StatController.minimum + rand.nextDouble() * (StatController.maximum - StatController.minimum);
+    return Statistics.minimum + rand.nextDouble() * (Statistics.maximum - Statistics.minimum);
   }
 
   public boolean isFree() {

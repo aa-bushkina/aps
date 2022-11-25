@@ -4,17 +4,15 @@ import lombok.Getter;
 import org.course.application.components.*;
 import org.course.application.events.Event;
 import org.course.application.events.Type;
-import org.course.statistic.StatController;
+import org.course.statistic.Statistics;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @Getter
 public class Controller {
-  public static StatController statistics = StatController.getInstance();
-  private final int requiredOrdersCount = StatController.countOfRequiredOrders;
-  private double currentTime;
-  /*  private int currentIndex;*/
+  public static Statistics statistics = Statistics.getInstance();
+  private final int requiredOrdersCount = Statistics.countOfRequiredOrders;
 
   private final Buffer buffer;
   private final Terminal terminal;
@@ -34,8 +32,6 @@ public class Controller {
   }
 
   public Controller() {
-    //currentIndex = 0;
-    currentTime = 0;
     buffer = new Buffer(statistics.getBufferSize());
     devices = new ArrayList<>(statistics.getDevicesCount());
     for (int i = 0; i < statistics.getDevicesCount(); i++) {
@@ -61,7 +57,7 @@ public class Controller {
     //System.out.println(currentEvent.eventTime + currentEvent.eventType.toString());
     final Type currentType = currentEvent.eventType;
     final int currentId = currentEvent.id;
-    currentTime = currentEvent.eventTime;
+    final double currentTime = currentEvent.eventTime;
     if (currentType == Type.Generated) {
       if (statistics.getTotalOrdersCount() < requiredOrdersCount) {
         List<Event> newEvents = terminal.sendOrderToBuffer(currentId, currentTime);
@@ -84,7 +80,7 @@ public class Controller {
     return currentEvent;
   }
 
-  public StatController getStatistics() {
+  public Statistics getStatistics() {
     return statistics;
   }
 }

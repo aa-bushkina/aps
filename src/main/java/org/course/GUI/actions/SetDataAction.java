@@ -2,7 +2,7 @@ package org.course.GUI.actions;
 
 import org.course.GUI.frames.ChooseModeFrame;
 import org.course.GUI.frames.StartFrame;
-import org.course.statistic.StatController;
+import org.course.statistic.Statistics;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -22,13 +22,13 @@ public class SetDataAction extends AbstractAction {
 
   @Override
   public void actionPerformed(@NotNull final ActionEvent e) {
-    StatController.countOfRestaurantDevices = Integer.parseInt(startDataFields.get(0).getText());
-    StatController.countOfClients = Integer.parseInt(startDataFields.get(1).getText());
-    StatController.countOfRequiredOrders = Integer.parseInt(startDataFields.get(2).getText());
-    StatController.sizeOfBuffer = Integer.parseInt(startDataFields.get(3).getText());
-    StatController.minimum = Double.parseDouble(startDataFields.get(4).getText());
-    StatController.maximum = Double.parseDouble(startDataFields.get(5).getText());
-    StatController.lambda = Double.parseDouble(startDataFields.get(6).getText());
+    Statistics.countOfRestaurantDevices = Integer.parseInt(startDataFields.get(0).getText());
+    Statistics.countOfClients = Integer.parseInt(startDataFields.get(1).getText());
+    Statistics.countOfRequiredOrders = Integer.parseInt(startDataFields.get(2).getText());
+    Statistics.sizeOfBuffer = Integer.parseInt(startDataFields.get(3).getText());
+    Statistics.minimum = Double.parseDouble(startDataFields.get(4).getText());
+    Statistics.maximum = Double.parseDouble(startDataFields.get(5).getText());
+    Statistics.lambda = Double.parseDouble(startDataFields.get(6).getText());
     createChooseFrame();
   }
 

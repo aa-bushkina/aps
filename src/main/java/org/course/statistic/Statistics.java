@@ -7,7 +7,7 @@ import java.util.ArrayList;
 
 @Getter
 @Setter
-public class StatController {
+public class Statistics {
   public static int countOfRestaurantDevices;
   public static int countOfClients;
   public static int countOfRequiredOrders;
@@ -24,7 +24,7 @@ public class StatController {
   private double totalTime;
   private ArrayList<ClientStatistics> clientsStats;
 
-  private StatController(double totalTime, int devicesCount, int clientsCount) {
+  private Statistics(double totalTime, int devicesCount, int clientsCount) {
     this.devicesCount = devicesCount;
     this.clientsCount = clientsCount;
     this.totalTime = totalTime;
@@ -37,8 +37,8 @@ public class StatController {
     }
   }
 
-  public static StatController getInstance() {
-    return new StatController(220000, countOfRestaurantDevices, countOfClients);
+  public static Statistics getInstance() {
+    return new Statistics(220000, countOfRestaurantDevices, countOfClients);
   }
 
   public void orderGenerated(int srcId) {

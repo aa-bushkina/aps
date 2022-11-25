@@ -2,7 +2,7 @@ package org.course.application.components;
 
 import org.course.application.events.Event;
 import org.course.application.events.Type;
-import org.course.statistic.StatController;
+import org.course.statistic.Statistics;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;
@@ -13,11 +13,11 @@ public class Terminal {
   @NotNull
   List<Client> clients;
   @NotNull
-  private final StatController statistics;
+  private final Statistics statistics;
 
   public Terminal(@NotNull final Buffer buffer,
                   @NotNull final List<Client> clients,
-                  @NotNull final StatController statistics) {
+                  @NotNull final Statistics statistics) {
     this.buffer = buffer;
     this.clients = clients;
     this.statistics = statistics;

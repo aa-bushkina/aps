@@ -3,7 +3,7 @@ package org.course.application.components;
 import lombok.Getter;
 import org.course.application.Order;
 
-import static org.course.statistic.StatController.lambda;
+import static org.course.statistic.Statistics.lambda;
 
 @Getter
 public class Client {

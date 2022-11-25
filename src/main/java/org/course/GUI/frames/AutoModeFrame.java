@@ -2,7 +2,7 @@ package org.course.GUI.frames;
 
 import org.course.application.Controller;
 import org.course.statistic.ClientStatistics;
-import org.course.statistic.StatController;
+import org.course.statistic.Statistics;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -10,9 +10,9 @@ import java.awt.*;
 
 
 public class AutoModeFrame extends CustomFrame {
-  StatController statistics;
+  Statistics statistics;
 
-  public void setStatistics(@NotNull final StatController statistics) {
+  public void setStatistics(@NotNull final Statistics statistics) {
     this.statistics = statistics;
   }
 
