@@ -2,19 +2,18 @@ package org.course.application;
 
 import lombok.Getter;
 import org.course.application.components.*;
+import org.course.application.events.Event;
+import org.course.application.events.Type;
 import org.course.statistic.StatController;
-import org.course.utils.Event;
-import org.course.utils.Type;
 
 import java.util.ArrayList;
-import java.util.Optional;
 
 @Getter
 public class Controller {
   public static StatController statistics = StatController.getInstance();
   private final int requiredOrdersCount = StatController.countOfRequiredOrders;
   private double currentTime;
-  private int currentIndex;
+  /*  private int currentIndex;*/
 
   private final Buffer buffer;
   private final Terminal terminal;
@@ -23,7 +22,7 @@ public class Controller {
   private final ArrayList<RestaurantDevice> devices;
   private ArrayList<Event> events;
 
-  private void findFreeDeviceIndex() {
+/*  private void findFreeDeviceIndex() {
     while (!devices.get(currentIndex).isFree()) {
       currentIndex++;
       if (currentIndex == statistics.getDevicesCount()) {
@@ -31,7 +30,7 @@ public class Controller {
         return;
       }
     }
-  }
+  }*/
 
   private void initEvents() {
     events = new ArrayList<>();
@@ -44,14 +43,14 @@ public class Controller {
   }
 
   public Controller() {
-    currentIndex = 0;
+    //currentIndex = 0;
     currentTime = 0;
     buffer = new Buffer(statistics.getBufferSize());
     devices = new ArrayList<>(statistics.getDevicesCount());
     for (int i = 0; i < statistics.getDevicesCount(); i++) {
       devices.add(new RestaurantDevice(i));
     }
-    distributor = new Distributor(buffer, devices);
+    distributor = new Distributor(buffer, devices, statistics);
     clients = new ArrayList<>(statistics.getClientsCount());
     for (int i = 0; i < statistics.getClientsCount(); i++) {
       clients.add(new Client(i));
@@ -85,26 +84,16 @@ public class Controller {
         }
       }
     } else if (currentType == Type.Unbuffered) {
-      findFreeDeviceIndex();
-      RestaurantDevice currentDevice = devices.get(currentIndex);
-      if (currentDevice.isFree()
-        && distributor.isExistOrdersInBuffer()) {
-        Optional<Order> order = distributor.getOrderFromBuffer();
-        if (order.isPresent()) {
-          events.add(new Event(Type.Completed, currentTime
-            + distributor.getDeviceReleaseTime(), currentDevice.getDeviceId()));
-          devices.get(currentIndex).setCurrentOrder(order.get());
-          devices.get(currentIndex).setOrderStartTime(currentTime);
-          if (events.size() > 0) {
-            events.sort(Event::compare);
-          }
-        }
+      final Event newEvent = distributor.sendOrderToDevice(currentTime);
+      if (newEvent != null) {
+        events.add(newEvent);
+        events.sort(Event::compare);
       }
     } else if (currentType == Type.Completed) {
       RestaurantDevice currentDevice = devices.get(currentId);
 
       if (currentDevice.getCurrentOrder() != null) {
-        statistics.taskCompleted(currentDevice.getCurrentOrder().clientId(), currentId,
+        statistics.taskCompleted(currentDevice.getCurrentOrder().clientId(),
           currentTime - currentDevice.getCurrentOrder().startTime(),
           currentTime - currentDevice.getOrderStartTime());
         devices.get(currentId).setCurrentOrder(null);
