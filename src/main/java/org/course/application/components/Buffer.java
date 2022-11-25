@@ -6,6 +6,7 @@ import org.course.application.Order;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 
 @Getter
 public class Buffer {
@@ -15,7 +16,7 @@ public class Buffer {
   private int fetchIndex;
   private final int capacity;
   private int size;
-  ArrayList<Integer> countTimeInBuffer;
+  LinkedList<Integer> indexesQueue;
 
   public Buffer(final int capacity) {
     this.capacity = capacity;
@@ -26,10 +27,7 @@ public class Buffer {
     for (int i = 0; i < capacity; i++) {
       orders.add(null);
     }
-    countTimeInBuffer = new ArrayList<>(capacity);
-    for (int i = 0; i < capacity; i++) {
-      countTimeInBuffer.add(0);
-    }
+    indexesQueue = new LinkedList<>();
   }
 
   public boolean isEmpty() {
@@ -41,37 +39,54 @@ public class Buffer {
   }
 
   public void addOrder(@NotNull final Order order) {
-    incrementIndexValue();
+    System.out.println("_________________");
+    System.out.println("Queue " + indexesQueue);
+    System.out.println("Insert index " + insertIndex);
     if (isFull()) {
-      final int oldestInsertIndex = findOldestIndexOfElement();
-      Order canceledOrder = orders.get(oldestInsertIndex);
-      orders.set(oldestInsertIndex, order);
-      initializeIndexValue(oldestInsertIndex);
+      insertIndex = indexesQueue.pollFirst();
+      Order canceledOrder = orders.get(insertIndex);
       makeStatistics(canceledOrder, order);
-      return;
+      System.out.println("Cancel order " + canceledOrder.orderId() + "!!!!!!!!!!!!!!!!!!!!!!!");
+    } else {
+      size++;
+      while (orders.get(insertIndex) != null) {
+        insertIndex++;
+        if (insertIndex == capacity) {
+          insertIndex = 0;
+        }
+
+      }
     }
     orders.set(insertIndex, order);
-    initializeIndexValue(insertIndex);
+    indexesQueue.addLast(insertIndex);
     insertIndex++;
     if (insertIndex == capacity) {
       insertIndex = 0;
     }
-    size++;
+    System.out.println("Add order " + order.orderId());
+    System.out.println("Insert index " + insertIndex);
+    System.out.println("_________________");
   }
 
   public Order getOrder() {
+    System.out.println("_________________");
+    System.out.println("Queue " + indexesQueue);
+    System.out.println("Fetch index " + fetchIndex);
     if (isEmpty()) {
       return null;
     }
     if (orders.get(fetchIndex) != null) {
       final Order order = orders.get(fetchIndex);
       orders.set(fetchIndex, null);
-      clearIndexValue(fetchIndex);
+      indexesQueue.remove((Integer) fetchIndex);
       fetchIndex++;
       if (fetchIndex == capacity) {
         fetchIndex = 0;
       }
       size--;
+      System.out.println("Get order " + order.orderId());
+      System.out.println("Fetch index " + fetchIndex);
+      System.out.println("_________________");
       return order;
     }
     Order order;
@@ -80,16 +95,19 @@ public class Buffer {
     if (fetchIndex == capacity) {
       fetchIndex = 0;
     }
+    System.out.println("Fetch index " + fetchIndex);
     while (fetchIndex != currentIndex) {
       if (orders.get(fetchIndex) != null) {
         order = orders.get(fetchIndex);
         orders.set(fetchIndex, null);
-        clearIndexValue(fetchIndex);
+        indexesQueue.remove((Integer) fetchIndex);
         fetchIndex++;
         if (fetchIndex == capacity) {
           fetchIndex = 0;
         }
+        System.out.println("Fetch index " + fetchIndex);
         size--;
+        System.out.println("_________________");
         return order;
       }
       fetchIndex++;
@@ -103,35 +121,6 @@ public class Buffer {
   private void makeStatistics(@NotNull final Order canceledOrder, @NotNull final Order order) {
     Controller.statistics.taskCanceled(canceledOrder.clientId(),
       order.startTime() - canceledOrder.startTime());
-  }
-
-  private void incrementIndexValue() {
-    for (int i = 0; i < countTimeInBuffer.size(); i++) {
-      if (countTimeInBuffer.get(i) != 0) {
-        countTimeInBuffer.set(i, countTimeInBuffer.get(i) + 1);
-      }
-    }
-  }
-
-  private void clearIndexValue(final int index) {
-    countTimeInBuffer.set(index, 0);
-  }
-
-  private void initializeIndexValue(final int index) {
-    countTimeInBuffer.set(index, 1);
-  }
-
-  private int findOldestIndexOfElement() {
-    int maxIndex = -1;
-    int maxValue = -1;
-    for (int i = 0; i < countTimeInBuffer.size(); i++) {
-      int times = countTimeInBuffer.get(i);
-      if (times > maxValue) {
-        maxValue = times;
-        maxIndex = i;
-      }
-    }
-    return maxIndex;
   }
 }
 
