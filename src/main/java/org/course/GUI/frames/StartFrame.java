@@ -1,7 +1,7 @@
 package org.course.GUI.frames;
 
 import lombok.Getter;
-import org.course.GUI.actions.SetDataAction;
+import org.course.GUI.actions.StartStepMode;
 
 import javax.swing.*;
 import java.awt.*;
@@ -83,7 +83,7 @@ public class StartFrame extends CustomFrame {
     startDataFields.add(text6);
     startDataFields.add(text7);
 
-    JButton button = new JButton(new SetDataAction(currentFrame, startDataFields));
+    JButton button = new JButton(new StartStepMode(currentFrame, startDataFields));
     button.setText("start");
     box.add(string1);
     box.add(string3);

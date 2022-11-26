@@ -1,5 +1,7 @@
 package org.course.GUI.frames;
 
+import org.course.GUI.actions.NextStepAction;
+import org.course.GUI.actions.StartStepMode;
 import org.course.application.Controller;
 import org.course.statistic.ClientStatistics;
 import org.course.statistic.Statistics;
@@ -9,14 +11,14 @@ import javax.swing.*;
 import java.awt.*;
 
 
-public class AutoModeFrame extends CustomFrame {
+public class ResultsFrame extends CustomFrame {
   Statistics statistics;
 
   public void setStatistics(@NotNull final Statistics statistics) {
     this.statistics = statistics;
   }
 
-  public void start() {
+  public void start(final NextStepAction nextStepAction) {
     currentFrame = createFrame("Auto mode");
     String[] columnNames = {"Tasks count", "Failure probability", "Total time in system",
       "Time in buffer", "Buffer dispersion", "Maintenance dispersion"};
@@ -33,6 +35,13 @@ public class AutoModeFrame extends CustomFrame {
       i++;
     }
     JTable table = new JTable(data, columnNames);
+
+    JPanel buttonPanelWaveform = new JPanel(new CardLayout());
+    JButton buttonWaveform = new JButton(/*new StartStepModeAction()*/);
+    buttonWaveform.setText("Waveform");
+    buttonPanelWaveform.add(buttonWaveform);
+
+    currentFrame.getContentPane().add(buttonPanelWaveform, BorderLayout.SOUTH);
 
     JScrollPane scroll = new JScrollPane(table);
     table.setPreferredScrollableViewportSize(new Dimension(700, 200));

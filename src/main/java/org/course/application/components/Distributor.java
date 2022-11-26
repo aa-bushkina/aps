@@ -44,6 +44,7 @@ public class Distributor {
   }
 
   private void findFreeDeviceIndex() {
+    currentIndex = 0;
     while (!devices.get(currentIndex).isFree()) {
       currentIndex++;
       if (currentIndex == statistics.getDevicesCount()) {
