@@ -64,8 +64,7 @@ public class StepModeFrame extends CustomFrame {
     buttonPanelAuto.add(buttonAuto);
 
     JPanel buttonPanelResults = new JPanel(new CardLayout());
-    JButton buttonResults = new JButton(new GetResultsAction(currentFrame, controller,
-      new NextStepAction(controller, bufferTableModel, resultsTableModel, devicesTableModel)));
+    JButton buttonResults = new JButton(new GetResultsAction(currentFrame, controller));
     buttonResults.setText("Results");
     buttonPanelResults.add(buttonResults);
 

@@ -20,7 +20,6 @@ public class ClientStatistics {
     squaredTotalBufferedTime = 0;
   }
 
-
   public void incrementGeneratedTask() {
     generatedTasksCount++;
   }
@@ -28,7 +27,6 @@ public class ClientStatistics {
   public void incrementCanceledTask() {
     canceledTasksCount++;
   }
-
 
   public void addTime(double time) {
     totalTime += time;

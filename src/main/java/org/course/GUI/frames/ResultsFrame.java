@@ -1,7 +1,5 @@
 package org.course.GUI.frames;
 
-import org.course.GUI.actions.NextStepAction;
-import org.course.GUI.actions.StartStepMode;
 import org.course.application.Controller;
 import org.course.statistic.ClientStatistics;
 import org.course.statistic.Statistics;
@@ -18,7 +16,7 @@ public class ResultsFrame extends CustomFrame {
     this.statistics = statistics;
   }
 
-  public void start(final NextStepAction nextStepAction) {
+  public void start() {
     currentFrame = createFrame("Auto mode");
     String[] columnNames = {"Tasks count", "Failure probability", "Total time in system",
       "Time in buffer", "Buffer dispersion", "Maintenance dispersion"};

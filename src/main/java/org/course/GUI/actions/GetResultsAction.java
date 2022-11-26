@@ -12,15 +12,11 @@ public class GetResultsAction extends AbstractAction {
   final private JFrame prevFrame;
   @NotNull
   final Controller controller;
-  @NotNull
-  final NextStepAction nextStepAction;
 
   public GetResultsAction(@NotNull final JFrame frame,
-                          @NotNull final Controller controller,
-                          @NotNull final NextStepAction nextStepAction) {
+                          @NotNull final Controller controller) {
     this.prevFrame = frame;
     this.controller = controller;
-    this.nextStepAction = nextStepAction;
   }
 
   @Override
@@ -28,6 +24,6 @@ public class GetResultsAction extends AbstractAction {
     prevFrame.setVisible(false);
     ResultsFrame modeFrame = new ResultsFrame();
     modeFrame.setStatistics(controller.getStatistics());
-    modeFrame.start(nextStepAction);
+    modeFrame.start();
   }
 }
