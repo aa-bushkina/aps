@@ -9,18 +9,20 @@ import org.jetbrains.annotations.NotNull;
 public class Event {
   public Type eventType;
   public double eventTime;
+  public String orderId;
   public int id;
 
-  public Event(@NotNull final Type type, final double time, final int id) {
+  public Event(@NotNull final Type type, final double time, final String orderId, final int id) {
     this.eventType = type;
     this.eventTime = time;
+    this.orderId = orderId;
     this.id = id;
   }
 
-  public Event(@NotNull final Type type, final double time) {
+  public Event(@NotNull final Type type, final double time, final String orderId) {
     this.eventType = type;
     this.eventTime = time;
-    this.id = -1;
+    this.orderId = orderId;
   }
 
   public static int compare(@NotNull final Event l, @NotNull final Event r) {

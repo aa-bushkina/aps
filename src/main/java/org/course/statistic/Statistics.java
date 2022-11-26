@@ -46,6 +46,14 @@ public class Statistics {
     totalOrdersCount++;
   }
 
+  public int getCanceledOrdersCount() {
+    int sum = 0;
+    for (ClientStatistics stat : clientsStats) {
+      sum += stat.getCanceledTasksCount();
+    }
+    return sum;
+  }
+
   public void taskCanceled(int srcId, double usedTime) {
     clientsStats.get(srcId).incrementCanceledTask();
     taskCompleted(srcId, usedTime, 0);

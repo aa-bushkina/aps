@@ -24,16 +24,18 @@ public class Distributor {
     this.statistics = statistics;
   }
 
-  public Event sendOrderToDevice(final double currentTime) {
+  public Event sendOrderToDevice(final double currentTime, @NotNull final Event currentEvent) {
     findFreeDeviceIndex();
     Device currentDevice = devices.get(currentIndex);
     if (currentDevice.isFree() && !buffer.isEmpty()) {
+      currentEvent.setId(devices.get(currentIndex).getDeviceId());
       final Order order = buffer.getOrder();
       devices.get(currentIndex).setCurrentOrder(order);
       devices.get(currentIndex).setOrderStartTime(currentTime);
       return new Event(
         Type.Completed,
         currentTime + devices.get(currentIndex).getReleaseTime(),
+        order.orderId(),
         currentDevice.getDeviceId());
     }
     return null;

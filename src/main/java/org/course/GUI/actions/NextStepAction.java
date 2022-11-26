@@ -13,24 +13,28 @@ public class NextStepAction extends AbstractAction {
   @NotNull
   private final Controller controller;
   @NotNull
-  private final DefaultTableModel bufferTableModel;
+  private final DefaultTableModel bufferTable;
   @NotNull
   private final DefaultTableModel resultsTable;
+  @NotNull
+  private final DefaultTableModel devicesTable;
   public static Event event = null;
   static double time = 0;
 
   public NextStepAction(@NotNull final Controller controller,
                         @NotNull final DefaultTableModel bufferTable,
-                        @NotNull final DefaultTableModel resultsTable) {
+                        @NotNull final DefaultTableModel resultsTable,
+                        @NotNull final DefaultTableModel devicesTable) {
     this.controller = controller;
-    this.bufferTableModel = bufferTable;
+    this.bufferTable = bufferTable;
     this.resultsTable = resultsTable;
+    this.devicesTable = devicesTable;
   }
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    bufferTableModel.setValueAt("", controller.getBuffer().getInsertIndex(), 1);
-    bufferTableModel.setValueAt("", controller.getBuffer().getFetchIndex(), 3);
+    bufferTable.setValueAt("", controller.getBuffer().getInsertIndex(), 1);
+    bufferTable.setValueAt("", controller.getBuffer().getFetchIndex(), 3);
 
     event = controller.stepMode();
     time = controller.getCurrentTime();
@@ -38,20 +42,29 @@ public class NextStepAction extends AbstractAction {
     for (int i = 0; i < controller.getBuffer().getCapacity(); i++) {
       Order order = controller.getBuffer().getOrders().get(i);
       if (order == null) {
-        bufferTableModel.setValueAt("", i, 2);
+        bufferTable.setValueAt("", i, 2);
       } else {
-        bufferTableModel.setValueAt(order.orderId(), i, 2);
+        bufferTable.setValueAt(order.orderId(), i, 2);
       }
     }
-    bufferTableModel.setValueAt("-->", controller.getBuffer().getInsertIndex(), 1);
-    bufferTableModel.setValueAt("<--", controller.getBuffer().getFetchIndex(), 3);
+    bufferTable.setValueAt("-->", controller.getBuffer().getInsertIndex(), 1);
+    bufferTable.setValueAt("<--", controller.getBuffer().getFetchIndex(), 3);
+
+    for (int i = 0; i < controller.getDevices().size(); i++) {
+      Order order = controller.getDevices().get(i).getCurrentOrder();
+      if (order == null) {
+        devicesTable.setValueAt("", i, 1);
+      } else {
+        devicesTable.setValueAt(order.orderId(), i, 1);
+      }
+    }
 
     resultsTable.addRow(new Object[]{
-      "",
       controller.getCurrentTime(),
-      event.eventType,
-      controller.getStatistics().getCompletedOrdersCount(),
       "",
-      ""});
+      event.eventType,
+      event.orderId,
+      controller.getStatistics().getCompletedOrdersCount(),
+      controller.getStatistics().getCanceledOrdersCount()});
   }
 }

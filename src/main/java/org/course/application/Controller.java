@@ -13,6 +13,7 @@ import java.util.List;
 public class Controller {
   public static Statistics statistics = Statistics.getInstance();
   private final int ordersCount = Statistics.countOfOrders;
+  private Order currentOrder;
   private double currentTime;
 
   private final Buffer buffer;
@@ -25,7 +26,7 @@ public class Controller {
   private void initEvents() {
     events = new ArrayList<>();
     for (int i = 0; i < statistics.getClientsCount(); i++) {
-      events.add(new Event(Type.Generated, clients.get(i).getNextOrderGenerationTime(), i));
+      events.add(new Event(Type.Generated, clients.get(i).getNextOrderGenerationTime(), (i + "-" + 0), i));
     }
     if (events.size() > 0) {
       events.sort(Event::compare);
@@ -68,14 +69,14 @@ public class Controller {
         }
       }
     } else if (currentType == Type.Unbuffered) {
-      final Event newEvent = distributor.sendOrderToDevice(currentTime);
+      final Event newEvent = distributor.sendOrderToDevice(currentTime, currentEvent);
       if (newEvent != null) {
         events.add(newEvent);
         events.sort(Event::compare);
       }
     } else if (currentType == Type.Completed) {
       devices.get(currentId).release(currentTime);
-      events.add(new Event(Type.Unbuffered, currentTime));
+      events.add(new Event(Type.Unbuffered, currentTime, null));
       events.sort(Event::compare);
     }
     return currentEvent;

@@ -29,10 +29,12 @@ public class Terminal {
   }
 
   public List<Event> putOrderToBuffer(final int currentId, final double currentTime) {
-    buffer.addOrder(receiveOrder(currentId, currentTime));
+    final Order currentOrder = receiveOrder(currentId, currentTime);
+    buffer.addOrder(currentOrder);
     List<Event> events = List.of(
-      new Event(Type.Generated, currentTime + clients.get(currentId).getNextOrderGenerationTime(), currentId),
-      new Event(Type.Unbuffered, currentTime));
+      new Event(Type.Generated, currentTime + clients.get(currentId).getNextOrderGenerationTime(),
+        currentOrder.orderId(), currentId),
+      new Event(Type.Unbuffered, currentTime, currentOrder.orderId()));
     statistics.orderGenerated(currentId);
     return events;
   }
