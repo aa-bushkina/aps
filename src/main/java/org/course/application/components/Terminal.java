@@ -32,9 +32,9 @@ public class Terminal {
     final Order currentOrder = receiveOrder(currentId, currentTime);
     buffer.addOrder(currentOrder);
     List<Event> events = List.of(
+      new Event(Type.Unbuffered, currentTime, currentOrder.orderId()),
       new Event(Type.Generated, currentTime + clients.get(currentId).getNextOrderGenerationTime(),
-        currentOrder.orderId(), currentId),
-      new Event(Type.Unbuffered, currentTime, currentOrder.orderId()));
+        null, currentId));
     statistics.orderGenerated(currentId);
     return events;
   }

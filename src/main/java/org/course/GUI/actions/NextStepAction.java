@@ -3,6 +3,7 @@ package org.course.GUI.actions;
 import org.course.application.Controller;
 import org.course.application.Order;
 import org.course.application.events.Event;
+import org.course.application.events.Type;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -58,10 +59,16 @@ public class NextStepAction extends AbstractAction {
         devicesTable.setValueAt(order.orderId(), i, 1);
       }
     }
+    String element;
+    if (event.eventType == Type.Generated) {
+      element = "И" + event.id;
+    } else {
+      element = "П" + event.id;
+    }
 
     resultsTable.addRow(new Object[]{
       controller.getCurrentTime(),
-      "",
+      element,
       event.eventType,
       event.orderId,
       controller.getStatistics().getCompletedOrdersCount(),

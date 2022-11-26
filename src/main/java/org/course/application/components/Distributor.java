@@ -27,9 +27,11 @@ public class Distributor {
   public Event sendOrderToDevice(final double currentTime, @NotNull final Event currentEvent) {
     findFreeDeviceIndex();
     Device currentDevice = devices.get(currentIndex);
+    currentEvent.setOrderId("");
     if (currentDevice.isFree() && !buffer.isEmpty()) {
       currentEvent.setId(devices.get(currentIndex).getDeviceId());
       final Order order = buffer.getOrder();
+      currentEvent.setOrderId(order.orderId());
       devices.get(currentIndex).setCurrentOrder(order);
       devices.get(currentIndex).setOrderStartTime(currentTime);
       return new Event(
