@@ -16,6 +16,7 @@ repositories {
 dependencies {
     implementation("org.jetbrains:annotations:23.0.0")
     implementation("io.freefair.gradle:lombok-plugin:6.5.1")
+    implementation("org.jfree:jfreechart:1.5.3")
     testImplementation("org.junit.jupiter:junit-jupiter-api:5.9.0")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.9.0")
 }

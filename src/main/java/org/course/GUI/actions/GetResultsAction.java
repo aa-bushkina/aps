@@ -22,8 +22,7 @@ public class GetResultsAction extends AbstractAction {
   @Override
   public void actionPerformed(ActionEvent e) {
     prevFrame.setVisible(false);
-    ResultsFrame modeFrame = new ResultsFrame();
-    modeFrame.setStatistics(controller.getStatistics());
+    ResultsFrame modeFrame = new ResultsFrame(controller);
     modeFrame.start();
   }
 }

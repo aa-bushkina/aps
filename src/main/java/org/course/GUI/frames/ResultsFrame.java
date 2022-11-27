@@ -2,7 +2,6 @@ package org.course.GUI.frames;
 
 import org.course.application.Controller;
 import org.course.statistic.ClientStatistics;
-import org.course.statistic.Statistics;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -10,10 +9,11 @@ import java.awt.*;
 
 
 public class ResultsFrame extends CustomFrame {
-  Statistics statistics;
+  @NotNull
+  final Controller controller;
 
-  public void setStatistics(@NotNull final Statistics statistics) {
-    this.statistics = statistics;
+  public ResultsFrame(@NotNull final Controller controller) {
+    this.controller = controller;
   }
 
   public void start() {
@@ -23,7 +23,7 @@ public class ResultsFrame extends CustomFrame {
 
     String[][] data = new String[Controller.statistics.getClientsCount()][6];
     int i = 0;
-    for (ClientStatistics s : statistics.getClientsStats()) {
+    for (ClientStatistics s : controller.getStatistics().getClientsStats()) {
       data[i][0] = String.valueOf(s.getGeneratedTasksCount());
       data[i][1] = String.valueOf((double) s.getCanceledTasksCount() / s.getGeneratedTasksCount());
       data[i][2] = String.valueOf(s.getTotalTime());
@@ -34,17 +34,18 @@ public class ResultsFrame extends CustomFrame {
     }
     JTable table = new JTable(data, columnNames);
 
-    JPanel buttonPanelWaveform = new JPanel(new CardLayout());
-    JButton buttonWaveform = new JButton(/*new StartStepModeAction()*/);
+/*    JPanel buttonPanelWaveform = new JPanel(new CardLayout());
+    JButton buttonWaveform = new JButton(new GetWaveformAction(currentFrame, controller));
     buttonWaveform.setText("Waveform");
     buttonPanelWaveform.add(buttonWaveform);
 
-    currentFrame.getContentPane().add(buttonPanelWaveform, BorderLayout.SOUTH);
+    currentFrame.getContentPane().add(buttonPanelWaveform, BorderLayout.SOUTH);*/
 
     JScrollPane scroll = new JScrollPane(table);
-    table.setPreferredScrollableViewportSize(new Dimension(700, 200));
+    table.setPreferredScrollableViewportSize(new Dimension(500, 900));
     currentFrame.getContentPane().add(scroll);
-    currentFrame.setSize(1000, 500);
+    currentFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    currentFrame.setUndecorated(true);
     currentFrame.revalidate();
   }
 }

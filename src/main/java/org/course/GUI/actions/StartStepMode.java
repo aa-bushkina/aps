@@ -36,7 +36,7 @@ public class StartStepMode extends AbstractAction {
   private void createStepModeFrame() {
     prevFrame.setVisible(false);
     Controller controller = new Controller();
-    StepModeFrame newFrame = new StepModeFrame(statistics, controller);
+    StepModeFrame newFrame = new StepModeFrame(controller);
     newFrame.start();
   }
 }

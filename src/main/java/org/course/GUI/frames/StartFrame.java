@@ -94,6 +94,8 @@ public class StartFrame extends CustomFrame {
     box.add(Box.createVerticalStrut(25));
     box.add(button);
     panel.add(box);
+    currentFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    currentFrame.setUndecorated(true);
     currentFrame.revalidate();
   }
 }

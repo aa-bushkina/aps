@@ -14,7 +14,7 @@ public abstract class CustomFrame {
     };
     frame.setVisible(true);
     Toolkit toolkit = Toolkit.getDefaultToolkit();
-    frame.setBounds(toolkit.getScreenSize().width / 4, toolkit.getScreenSize().height / 4, 400, 350);
+    //frame.setBounds(toolkit.getScreenSize().width, toolkit.getScreenSize().height, 400, 350);
     frame.setTitle(title);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     return frame;

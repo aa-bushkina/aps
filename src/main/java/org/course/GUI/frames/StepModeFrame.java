@@ -1,10 +1,10 @@
 package org.course.GUI.frames;
 
+import org.course.GUI.Waveform;
 import org.course.GUI.actions.FinishStepAction;
 import org.course.GUI.actions.GetResultsAction;
 import org.course.GUI.actions.NextStepAction;
 import org.course.application.Controller;
-import org.course.statistic.Statistics;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
@@ -12,12 +12,10 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
 public class StepModeFrame extends CustomFrame {
-  final Statistics statistics;
+  @NotNull
   final Controller controller;
 
-  public StepModeFrame(@NotNull final Statistics statistics,
-                       @NotNull final Controller controller) {
-    this.statistics = statistics;
+  public StepModeFrame(@NotNull final Controller controller) {
     this.controller = controller;
   }
 
@@ -42,6 +40,9 @@ public class StepModeFrame extends CustomFrame {
     }
     JTable devicesTable = new JTable(new DefaultTableModel(devicesTableData, devicesTableColumnNames));
     DefaultTableModel devicesTableModel = (DefaultTableModel) devicesTable.getModel();
+
+    Waveform w = new Waveform();
+    JPanel waveform = w.createChartPanel(controller);
 
     String[] resultsTableColumnNames = {"Time", "Element", "Action", "Order", "Successful requests", "Canceled requests"};
     String[][] resultsTableData = new String[0][5];
@@ -75,6 +76,8 @@ public class StepModeFrame extends CustomFrame {
 
     JPanel leftPanel = new JPanel();
     leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
+    leftPanel.add(new JLabel("Waveform"));
+    leftPanel.add(waveform);
     leftPanel.add(new JLabel("Buffer"));
     leftPanel.add(bufferTable);
     leftPanel.add(Box.createVerticalStrut(50));
@@ -82,6 +85,7 @@ public class StepModeFrame extends CustomFrame {
     leftPanel.add(devicesTable);
 
     JPanel centralPanel = new JPanel();
+    centralPanel.setLayout(new GridLayout());
     centralPanel.add(new JScrollPane(leftPanel));
     centralPanel.add(new JScrollPane(resultsTable));
 
@@ -93,7 +97,8 @@ public class StepModeFrame extends CustomFrame {
     currentFrame.getContentPane().setLayout(new CardLayout());
     currentFrame.getContentPane().add(mainPanel, BorderLayout.CENTER);
 
-    currentFrame.setSize(800, 500);
+    currentFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
+    currentFrame.setUndecorated(true);
     currentFrame.revalidate();
   }
 }
