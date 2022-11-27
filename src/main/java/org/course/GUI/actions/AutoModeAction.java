@@ -21,6 +21,7 @@ public class AutoModeAction extends AbstractAction {
   @Override
   public void actionPerformed(ActionEvent e) {
     while (!controller.getEvents().isEmpty()) {
+      controller.stepMode();
       nextStepAction.actionPerformed(e);
     }
   }
