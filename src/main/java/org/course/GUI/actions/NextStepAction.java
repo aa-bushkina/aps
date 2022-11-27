@@ -32,19 +32,14 @@ public class NextStepAction extends AbstractAction {
     this.devicesTable = devicesTable;
   }
 
-  public NextStepAction(@NotNull final NextStepAction nextStepAction) {
-    this.controller = nextStepAction.controller;
-    this.bufferTable = nextStepAction.bufferTable;
-    this.resultsTable = nextStepAction.resultsTable;
-    this.devicesTable = nextStepAction.devicesTable;
-  }
-
   @Override
   public void actionPerformed(ActionEvent e) {
-    bufferTable.setValueAt("", controller.getBuffer().getInsertIndex(), 1);
-    bufferTable.setValueAt("", controller.getBuffer().getFetchIndex(), 3);
+    for (int i = 0; i < controller.getBuffer().getCapacity(); i++) {
+      bufferTable.setValueAt("", i, 1);
+      bufferTable.setValueAt("", i, 3);
+    }
 
-    event = controller.stepMode();
+    event = controller.getCurrentEvent();
     time = controller.getCurrentTime();
 
     for (int i = 0; i < controller.getBuffer().getCapacity(); i++) {

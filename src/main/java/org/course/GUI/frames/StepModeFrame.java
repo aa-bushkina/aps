@@ -1,7 +1,7 @@
 package org.course.GUI.frames;
 
 import org.course.GUI.Diagram;
-import org.course.GUI.actions.FinishStepAction;
+import org.course.GUI.actions.AutoModeAction;
 import org.course.GUI.actions.GetResultsAction;
 import org.course.GUI.actions.NextStepAction;
 import org.course.application.Controller;
@@ -64,7 +64,7 @@ public class StepModeFrame extends CustomFrame{
 
     JPanel buttonPanelAuto = new JPanel(new CardLayout());
     JButton buttonAuto = new JButton(
-      new FinishStepAction(controller,
+      new AutoModeAction(controller,
         new NextStepAction(controller, bufferTableModel, resultsTableModel, devicesTableModel)));
     buttonAuto.setText("Auto mode");
     buttonPanelAuto.add(buttonAuto);
@@ -84,7 +84,6 @@ public class StepModeFrame extends CustomFrame{
 
     JPanel leftPanel = new JPanel();
     leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-    //leftPanel.add(diagramPanel);
     leftPanel.add(new JLabel("Buffer"));
     leftPanel.add(bufferTable);
     leftPanel.add(Box.createVerticalStrut(50));

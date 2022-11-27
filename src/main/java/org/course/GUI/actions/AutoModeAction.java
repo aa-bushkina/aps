@@ -4,15 +4,16 @@ import org.course.application.Controller;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 
-public class FinishStepAction extends AbstractAction {
+public class AutoModeAction extends AbstractAction {
   @NotNull
   private final Controller controller;
   NextStepAction nextStepAction;
 
-  public FinishStepAction(@NotNull final Controller controller,
-                          @NotNull final NextStepAction nextStepAction) {
+  public AutoModeAction(@NotNull final Controller controller,
+                        @NotNull final NextStepAction nextStepAction) {
     this.controller = controller;
     this.nextStepAction = nextStepAction;
 
@@ -22,6 +23,7 @@ public class FinishStepAction extends AbstractAction {
   public void actionPerformed(ActionEvent e) {
     while (!controller.getEvents().isEmpty()) {
       nextStepAction.actionPerformed(e);
+      nextStepAction.buttonNext.doClick();
     }
   }
 }

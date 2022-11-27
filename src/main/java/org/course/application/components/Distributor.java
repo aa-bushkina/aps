@@ -43,14 +43,15 @@ public class Distributor {
     return null;
   }
 
-  private void findFreeDeviceIndex() {
+  public boolean findFreeDeviceIndex() {
     currentIndex = 0;
     while (!devices.get(currentIndex).isFree()) {
       currentIndex++;
       if (currentIndex == statistics.getDevicesCount()) {
         currentIndex = 0;
-        return;
+        return false;
       }
     }
+    return true;
   }
 }

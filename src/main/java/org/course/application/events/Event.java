@@ -10,7 +10,7 @@ public class Event {
   public Type eventType;
   public double eventTime;
   public String orderId;
-  public int id;
+  public int id = -1;
 
   public Event(@NotNull final Type type, final double time, final String orderId, final int id) {
     this.eventType = type;

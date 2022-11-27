@@ -13,7 +13,7 @@ import java.util.List;
 public class Controller {
   public static Statistics statistics = Statistics.getInstance();
   private final int ordersCount = Statistics.countOfOrders;
-  private Order currentOrder;
+  private Event currentEvent;
   private double currentTime;
 
   private final Buffer buffer;
@@ -56,7 +56,7 @@ public class Controller {
   }
 
   public Event stepMode() {
-    final Event currentEvent = events.remove(0);
+    currentEvent = events.remove(0);
     final Type currentType = currentEvent.eventType;
     final int currentId = currentEvent.id;
     currentTime = currentEvent.eventTime;
