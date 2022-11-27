@@ -4,16 +4,14 @@ package org.course.GUI;
 import lombok.Getter;
 import lombok.Setter;
 import org.course.application.Controller;
+import org.course.application.Order;
 import org.course.application.events.Event;
 import org.jetbrains.annotations.NotNull;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
 import org.jfree.chart.JFreeChart;
-import org.jfree.chart.axis.NumberAxis;
-import org.jfree.chart.axis.NumberTickUnit;
 import org.jfree.chart.plot.XYPlot;
 import org.jfree.chart.renderer.xy.XYLineAndShapeRenderer;
-import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
@@ -21,7 +19,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import static org.course.application.events.Type.*;
@@ -38,13 +36,18 @@ public class Diagram extends JPanel implements ActionListener {
   private HashMap<Integer, Double> currentVal;
   private HashMap<Integer, XYSeries> series;
   private int canceledOrderCount = 0;
+  final ArrayList<Order> bufferList;
 
   public JPanel getJPanel() {
     return chartPanel;
   }
 
-  public Diagram(Controller controller) {
+  public Diagram(@NotNull final Controller controller) {
     this.controller = controller;
+    bufferList = new ArrayList<>(controller.getBuffer().getSize());
+    for (int i = 0; i < controller.getBuffer().getCapacity(); i++) {
+      bufferList.add(null);
+    }
     series = new HashMap<>();
     devices_low = new HashMap<>();
     buffer_low = new HashMap<>();
@@ -104,23 +107,6 @@ public class Diagram extends JPanel implements ActionListener {
     this.chartPanel = content;
   }
 
-  private JFreeChart createChart(@NotNull final XYDataset dataset) {
-    final JFreeChart result = ChartFactory.createXYLineChart(
-      "Waveform",
-      "Time",
-      "Element",
-      dataset
-    );
-    final XYPlot plot = result.getXYPlot();
-    NumberAxis axisX = (NumberAxis) plot.getDomainAxis();
-    axisX.setRange(0.00, 160.00);
-    axisX.setStandardTickUnits(NumberAxis.createStandardTickUnits());
-    axisX.setTickUnit(new NumberTickUnit(0.1, new DecimalFormat(), 0));
-    NumberAxis axisY = (NumberAxis) plot.getRangeAxis();
-    axisY.setRange(0.0, 10.0);
-    return result;
-  }
-
   public void actionPerformed(final ActionEvent e) {
     if (e.getActionCommand().equals("NEXT")) {
       if (controller.getCurrentTime() == 0) {
@@ -145,33 +131,46 @@ public class Diagram extends JPanel implements ActionListener {
         series.get(generateIndex).add(time, currentVal.get(generateIndex));
         downValue(generateIndex);
         series.get(generateIndex).add(time, currentVal.get(generateIndex));
-        //ПОДНЯТЬ БУФЕР TODO
-        for (int i = devices_low.size() + 2, y = 0; i < series.size(); i++, y++) {
-          series.get(i).add(time, buffer_low.get(y));
+        //up buffer
+        for (int i = devices_low.size() + 2; i < series.size(); i++) {
+          series.get(i).add(time, currentVal.get(i));
         }
-        // int i =
-        //series.get(i).add(controller.getCurrentTime(), buffer_low.get(i) + 1);
+        final int bufferIndex = findDifferenceInLists(controller.getBuffer().getOrders());
+        if (bufferIndex != -1) {
+          upValue(devices_low.size() + 2 + bufferIndex);
+        }
+        series.get(devices_low.size() + 2 + bufferIndex)
+          .add(time, currentVal.get(devices_low.size() + 2 + bufferIndex));
         for (int i = 0; i < devices_low.size(); i++) {
           series.get(i + 2).add(time, currentVal.get(i + 2));
         }
       } else if (event.getEventType() == Unbuffered
         && event.id != -1) {
-        //ОПУСТИТЬ БУФФЕР
-
-        //Поднять девайс
+        //down buffer
+        for (int i = devices_low.size() + 2; i < series.size(); i++) {
+          series.get(i).add(time, currentVal.get(i));
+        }
+        final int bufferIndex = findDifferenceInLists(controller.getBuffer().getOrders());
+        if (bufferIndex != -1) {
+          downValue(devices_low.size() + 2 + bufferIndex);
+        }
+        series.get(devices_low.size() + 2 + bufferIndex)
+          .add(time, currentVal.get(devices_low.size() + 2 + bufferIndex));
+        //up device
         for (int i = 0; i < devices_low.size(); i++) {
           series.get(i + 2).add(time, currentVal.get(i + 2));
         }
         upValue(event.getId() + 2);
         series.get(event.getId() + 2).add(time, currentVal.get(event.getId() + 2));
       } else if (event.getEventType() == Completed) {
+        //down device
         for (int i = 0; i < devices_low.size(); i++) {
           series.get(i + 2).add(time, currentVal.get(i + 2));
         }
         downValue(event.getId() + 2);
         series.get(event.getId() + 2).add(time, currentVal.get(event.getId() + 2));
-        for (int i = devices_low.size() + 2, y = 0; i < series.size(); i++, y++) {
-          series.get(i).add(time, buffer_low.get(y));
+        for (int i = devices_low.size() + 2; i < series.size(); i++) {
+          series.get(i).add(time, currentVal.get(i));
         }
       }
       if (canceledOrderCount != controller.getStatistics().getCanceledOrdersCount()) {
@@ -193,5 +192,15 @@ public class Diagram extends JPanel implements ActionListener {
 
   private void downValue(final int lineNum) {
     currentVal.replace(lineNum, currentVal.get(lineNum) - 0.5);
+  }
+
+  private int findDifferenceInLists(final ArrayList<Order> list) {
+    for (int i = 0; i < list.size(); i++) {
+      if (list.get(i) != bufferList.get(i)) {
+        bufferList.set(i, list.get(i));
+        return i;
+      }
+    }
+    return -1;
   }
 }
