@@ -7,5 +7,4 @@ public class UI {
     StartFrame startFrame = new StartFrame();
     startFrame.start();
   }
-
 }

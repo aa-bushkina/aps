@@ -1,6 +1,6 @@
 package org.course.GUI.frames;
 
-import org.course.GUI.Waveform;
+import org.course.GUI.Diagram;
 import org.course.GUI.actions.FinishStepAction;
 import org.course.GUI.actions.GetResultsAction;
 import org.course.GUI.actions.NextStepAction;
@@ -11,12 +11,16 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class StepModeFrame extends CustomFrame {
+public class StepModeFrame extends CustomFrame{
   @NotNull
   final Controller controller;
+  @NotNull
+  final Diagram waveform;
 
-  public StepModeFrame(@NotNull final Controller controller) {
+  public StepModeFrame(@NotNull final Controller controller,
+                       @NotNull final Diagram waveform) {
     this.controller = controller;
+    this.waveform = waveform;
   }
 
   public void start() {
@@ -32,6 +36,7 @@ public class StepModeFrame extends CustomFrame {
     bufferTableData[0][3] = "<--";
     JTable bufferTable = new JTable(new DefaultTableModel(bufferTableData, bufferTableColumnNames));
     DefaultTableModel bufferTableModel = (DefaultTableModel) bufferTable.getModel();
+    bufferTable.setMaximumSize(new Dimension(200,200));
 
     String[] devicesTableColumnNames = {"Index", "Order"};
     String[][] devicesTableData = new String[Controller.statistics.getDevicesCount()][2];
@@ -40,9 +45,7 @@ public class StepModeFrame extends CustomFrame {
     }
     JTable devicesTable = new JTable(new DefaultTableModel(devicesTableData, devicesTableColumnNames));
     DefaultTableModel devicesTableModel = (DefaultTableModel) devicesTable.getModel();
-
-    Waveform w = new Waveform();
-    JPanel waveform = w.createChartPanel(controller);
+    devicesTable.setMaximumSize(new Dimension(200,200));
 
     String[] resultsTableColumnNames = {"Time", "Element", "Action", "Order", "Successful requests", "Canceled requests"};
     String[][] resultsTableData = new String[0][5];
@@ -55,6 +58,8 @@ public class StepModeFrame extends CustomFrame {
     JButton buttonNext = new JButton(
       new NextStepAction(controller, bufferTableModel, resultsTableModel, devicesTableModel));
     buttonNext.setText("Next step");
+    buttonNext.setActionCommand("NEXT");
+    buttonNext.addActionListener(waveform);
     buttonPanelNext.add(buttonNext);
 
     JPanel buttonPanelAuto = new JPanel(new CardLayout());
@@ -74,19 +79,26 @@ public class StepModeFrame extends CustomFrame {
     bottomPanel.add(buttonPanelAuto);
     bottomPanel.add(buttonPanelResults);
 
+    JPanel diagramPanel = new JPanel();
+    diagramPanel.add(new JScrollPane(waveform.getJPanel()));
+
     JPanel leftPanel = new JPanel();
     leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-    leftPanel.add(new JLabel("Waveform"));
-    leftPanel.add(waveform);
+    //leftPanel.add(diagramPanel);
     leftPanel.add(new JLabel("Buffer"));
     leftPanel.add(bufferTable);
     leftPanel.add(Box.createVerticalStrut(50));
     leftPanel.add(new JLabel("Devices"));
     leftPanel.add(devicesTable);
 
+    JPanel leftBigPanel = new JPanel();
+    leftBigPanel.setLayout(new BoxLayout(leftBigPanel, BoxLayout.Y_AXIS));
+    leftBigPanel.add(new JScrollPane(diagramPanel));
+    leftBigPanel.add(leftPanel);
+
     JPanel centralPanel = new JPanel();
     centralPanel.setLayout(new GridLayout());
-    centralPanel.add(new JScrollPane(leftPanel));
+    centralPanel.add(leftBigPanel);
     centralPanel.add(new JScrollPane(resultsTable));
 
     JPanel mainPanel = new JPanel();
@@ -98,7 +110,6 @@ public class StepModeFrame extends CustomFrame {
     currentFrame.getContentPane().add(mainPanel, BorderLayout.CENTER);
 
     currentFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-    currentFrame.setUndecorated(true);
     currentFrame.revalidate();
   }
 }

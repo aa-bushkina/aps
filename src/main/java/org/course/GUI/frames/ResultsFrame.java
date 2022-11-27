@@ -45,7 +45,6 @@ public class ResultsFrame extends CustomFrame {
     table.setPreferredScrollableViewportSize(new Dimension(500, 900));
     currentFrame.getContentPane().add(scroll);
     currentFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
-    currentFrame.setUndecorated(true);
     currentFrame.revalidate();
   }
 }

@@ -1,5 +1,6 @@
 package org.course.GUI.actions;
 
+import org.course.GUI.Diagram;
 import org.course.GUI.frames.StepModeFrame;
 import org.course.application.Controller;
 import org.course.statistic.Statistics;
@@ -9,7 +10,6 @@ import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 
-import static org.course.application.Controller.statistics;
 
 public class StartStepMode extends AbstractAction {
   private final ArrayList<JTextField> startDataFields;
@@ -36,7 +36,8 @@ public class StartStepMode extends AbstractAction {
   private void createStepModeFrame() {
     prevFrame.setVisible(false);
     Controller controller = new Controller();
-    StepModeFrame newFrame = new StepModeFrame(controller);
+    Diagram waveform = new Diagram(controller);
+    StepModeFrame newFrame = new StepModeFrame(controller, waveform);
     newFrame.start();
   }
 }
