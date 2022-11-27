@@ -4,7 +4,6 @@ import org.course.application.Controller;
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 
 public class AutoModeAction extends AbstractAction {
@@ -23,7 +22,6 @@ public class AutoModeAction extends AbstractAction {
   public void actionPerformed(ActionEvent e) {
     while (!controller.getEvents().isEmpty()) {
       nextStepAction.actionPerformed(e);
-      nextStepAction.buttonNext.doClick();
     }
   }
 }

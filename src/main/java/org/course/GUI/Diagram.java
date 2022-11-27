@@ -174,13 +174,13 @@ public class Diagram extends JPanel implements ActionListener {
           series.get(i).add(time, buffer_low.get(y));
         }
       }
-      if(canceledOrderCount!=controller.getStatistics().getCanceledOrdersCount())
-      {
+      if (canceledOrderCount != controller.getStatistics().getCanceledOrdersCount()) {
         series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
         upValue(cancelIndex);
         series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
         downValue(cancelIndex);
         series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
+        canceledOrderCount = controller.getStatistics().getCanceledOrdersCount();
       }
       series.get(series.size()).add(time, generator_low);
       series.get(1).add(time, canceled_low);
