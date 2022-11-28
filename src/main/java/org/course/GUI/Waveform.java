@@ -26,7 +26,7 @@ import static org.course.application.events.Type.*;
 
 @Getter
 @Setter
-public class Diagram extends JPanel implements ActionListener {
+public class Waveform extends JPanel implements ActionListener {
   private Controller controller;
   private JPanel chartPanel;
   private int generator_low;
@@ -42,7 +42,7 @@ public class Diagram extends JPanel implements ActionListener {
     return chartPanel;
   }
 
-  public Diagram(@NotNull final Controller controller) {
+  public Waveform(@NotNull final Controller controller) {
     this.controller = controller;
     bufferList = new ArrayList<>(controller.getBuffer().getSize());
     for (int i = 0; i < controller.getBuffer().getCapacity(); i++) {
