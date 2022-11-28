@@ -49,12 +49,6 @@ public class Controller {
     initEvents();
   }
 
-  public void autoMode() {
-    while (!events.isEmpty()) {
-      stepMode();
-    }
-  }
-
   public Event stepMode() {
     currentEvent = events.remove(0);
     final Type currentType = currentEvent.eventType;

@@ -1,5 +1,6 @@
 package org.course.GUI.actions;
 
+import org.course.GUI.Waveform;
 import org.course.application.Controller;
 import org.course.application.Order;
 import org.course.application.events.Event;

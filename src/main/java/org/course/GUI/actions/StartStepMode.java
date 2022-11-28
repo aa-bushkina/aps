@@ -1,6 +1,6 @@
 package org.course.GUI.actions;
 
-import org.course.GUI.Diagram;
+import org.course.GUI.Waveform;
 import org.course.GUI.frames.StepModeFrame;
 import org.course.application.Controller;
 import org.course.statistic.Statistics;
@@ -36,7 +36,7 @@ public class StartStepMode extends AbstractAction {
   private void createStepModeFrame() {
     prevFrame.setVisible(false);
     Controller controller = new Controller();
-    Diagram waveform = new Diagram(controller);
+    Waveform waveform = new Waveform(controller);
     StepModeFrame newFrame = new StepModeFrame(controller, waveform);
     newFrame.start();
   }

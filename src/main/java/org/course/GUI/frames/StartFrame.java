@@ -47,7 +47,7 @@ public class StartFrame extends CustomFrame {
 
     Box string2 = Box.createHorizontalBox();
     string2.add(label2);
-    JTextField text2 = new JTextField("50", 20);
+    JTextField text2 = new JTextField("20", 20);
     string2.add(text2);
 
     Box string3 = Box.createHorizontalBox();
@@ -86,6 +86,7 @@ public class StartFrame extends CustomFrame {
     JButton button = new JButton(new StartStepMode(currentFrame, startDataFields));
     button.setText("start");
     box.add(string1);
+    box.add(string2);
     box.add(string3);
     box.add(string4);
     box.add(string5);

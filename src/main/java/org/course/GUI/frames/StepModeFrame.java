@@ -1,6 +1,6 @@
 package org.course.GUI.frames;
 
-import org.course.GUI.Diagram;
+import org.course.GUI.Waveform;
 import org.course.GUI.actions.AutoModeAction;
 import org.course.GUI.actions.GetResultsAction;
 import org.course.GUI.actions.NextStepAction;
@@ -11,14 +11,14 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 import java.awt.*;
 
-public class StepModeFrame extends CustomFrame{
+public class StepModeFrame extends CustomFrame {
   @NotNull
   final Controller controller;
   @NotNull
-  final Diagram waveform;
+  final Waveform waveform;
 
   public StepModeFrame(@NotNull final Controller controller,
-                       @NotNull final Diagram waveform) {
+                       @NotNull final Waveform waveform) {
     this.controller = controller;
     this.waveform = waveform;
   }
@@ -36,7 +36,7 @@ public class StepModeFrame extends CustomFrame{
     bufferTableData[0][3] = "<--";
     JTable bufferTable = new JTable(new DefaultTableModel(bufferTableData, bufferTableColumnNames));
     DefaultTableModel bufferTableModel = (DefaultTableModel) bufferTable.getModel();
-    bufferTable.setMaximumSize(new Dimension(200,200));
+    bufferTable.setMaximumSize(new Dimension(200, 200));
 
     String[] devicesTableColumnNames = {"Index", "Order"};
     String[][] devicesTableData = new String[Controller.statistics.getDevicesCount()][2];
@@ -45,7 +45,7 @@ public class StepModeFrame extends CustomFrame{
     }
     JTable devicesTable = new JTable(new DefaultTableModel(devicesTableData, devicesTableColumnNames));
     DefaultTableModel devicesTableModel = (DefaultTableModel) devicesTable.getModel();
-    devicesTable.setMaximumSize(new Dimension(200,200));
+    devicesTable.setMaximumSize(new Dimension(200, 200));
 
     String[] resultsTableColumnNames = {"Time", "Element", "Action", "Order", "Successful requests", "Canceled requests"};
     String[][] resultsTableData = new String[0][5];
@@ -65,7 +65,7 @@ public class StepModeFrame extends CustomFrame{
     JPanel buttonPanelAuto = new JPanel(new CardLayout());
     JButton buttonAuto = new JButton(
       new AutoModeAction(controller,
-        new NextStepAction(controller, bufferTableModel, resultsTableModel, devicesTableModel)));
+        new NextStepAction(controller, bufferTableModel, resultsTableModel, devicesTableModel), waveform));
     buttonAuto.setText("Auto mode");
     buttonPanelAuto.add(buttonAuto);
 

@@ -34,12 +34,10 @@ public class Device {
   }
 
   public void release(final double currentTime) {
-    if (currentOrder != null) {
-      statistics.taskCompleted(currentOrder.clientId(),
-        currentTime - orderStartTime,
-        currentTime - orderStartTime);
-      currentOrder = null;
-      orderStartTime = currentTime;
-    }
+    statistics.taskCompleted(currentOrder.clientId(),
+      currentTime - orderStartTime,
+      currentTime - orderStartTime);
+    currentOrder = null;
+    orderStartTime = currentTime;
   }
 }
