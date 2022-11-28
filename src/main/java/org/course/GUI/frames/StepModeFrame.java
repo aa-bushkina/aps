@@ -56,16 +56,14 @@ public class StepModeFrame extends CustomFrame {
 
     JPanel buttonPanelNext = new JPanel(new CardLayout());
     JButton buttonNext = new JButton(
-      new NextStepAction(controller, bufferTableModel, resultsTableModel, devicesTableModel));
+      new NextStepAction(controller, bufferTableModel, resultsTableModel, devicesTableModel, waveform));
     buttonNext.setText("Next step");
-    buttonNext.setActionCommand("NEXT");
-    buttonNext.addActionListener(waveform);
     buttonPanelNext.add(buttonNext);
 
     JPanel buttonPanelAuto = new JPanel(new CardLayout());
     JButton buttonAuto = new JButton(
       new AutoModeAction(controller,
-        new NextStepAction(controller, bufferTableModel, resultsTableModel, devicesTableModel), waveform));
+        new NextStepAction(controller, bufferTableModel, resultsTableModel, devicesTableModel, waveform)));
     buttonAuto.setText("Auto mode");
     buttonPanelAuto.add(buttonAuto);
 

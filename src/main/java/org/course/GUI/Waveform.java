@@ -1,6 +1,5 @@
 package org.course.GUI;
 
-
 import lombok.Getter;
 import lombok.Setter;
 import org.course.application.Controller;
@@ -37,6 +36,7 @@ public class Waveform extends JPanel implements ActionListener {
   private HashMap<Integer, XYSeries> series;
   private int canceledOrderCount = 0;
   final ArrayList<Order> bufferList;
+  private boolean ifFirstIteration = true;
 
   public JPanel getJPanel() {
     return chartPanel;
@@ -48,10 +48,10 @@ public class Waveform extends JPanel implements ActionListener {
     for (int i = 0; i < controller.getBuffer().getCapacity(); i++) {
       bufferList.add(null);
     }
-    series = new HashMap<>();
-    devices_low = new HashMap<>();
-    buffer_low = new HashMap<>();
-    currentVal = new HashMap<>();
+    series = new HashMap<>(1048576);
+    devices_low = new HashMap<>(30);
+    buffer_low = new HashMap<>(30);
+    currentVal = new HashMap<>(30);
     canceled_low = 1;
     currentVal.put(1, (double) canceled_low);
     series.put(1, new XYSeries("Canceled"));
@@ -108,82 +108,79 @@ public class Waveform extends JPanel implements ActionListener {
   }
 
   public void actionPerformed(final ActionEvent e) {
-    if (e.getActionCommand().equals("NEXT")) {
-      if (controller.getCurrentTime() == 0) {
-        series.get(1).add(0, canceled_low);
-        series.get(series.size()).add(controller.getCurrentTime(), generator_low);
-        for (int i = 0; i < devices_low.size(); i++) {
-          series.get(i + 2).add(0, devices_low.get(i));
-        }
-        for (int i = devices_low.size() + 2, y = 0; i < series.size(); i++, y++) {
-          series.get(i).add(0, buffer_low.get(y));
-        }
+    if (ifFirstIteration) {
+      ifFirstIteration = false;
+      series.get(1).add(0, canceled_low);
+      series.get(series.size()).add(controller.getCurrentTime(), generator_low);
+      for (int i = 0; i < devices_low.size(); i++) {
+        series.get(i + 2).add(0, devices_low.get(i));
       }
-      controller.stepMode();
-      final Event event = controller.getCurrentEvent();
-      final double time = controller.getCurrentTime();
-      //пришел заказ
-      final int generateIndex = series.size();
-      final int cancelIndex = 1;
-      if (event.getEventType() == Generated) {
-        series.get(generateIndex).add(time, currentVal.get(generateIndex));
-        upValue(generateIndex);
-        series.get(generateIndex).add(time, currentVal.get(generateIndex));
-        downValue(generateIndex);
-        series.get(generateIndex).add(time, currentVal.get(generateIndex));
-        //up buffer
-        for (int i = devices_low.size() + 2; i < series.size(); i++) {
-          series.get(i).add(time, currentVal.get(i));
-        }
-        final int bufferIndex = findDifferenceInLists(controller.getBuffer().getOrders());
-        if (bufferIndex != -1) {
-          upValue(devices_low.size() + 2 + bufferIndex);
-        }
-        series.get(devices_low.size() + 2 + bufferIndex)
-          .add(time, currentVal.get(devices_low.size() + 2 + bufferIndex));
-        for (int i = 0; i < devices_low.size(); i++) {
-          series.get(i + 2).add(time, currentVal.get(i + 2));
-        }
-      } else if (event.getEventType() == Unbuffered
-        && event.id != -1) {
-        //down buffer
-        for (int i = devices_low.size() + 2; i < series.size(); i++) {
-          series.get(i).add(time, currentVal.get(i));
-        }
-        final int bufferIndex = findDifferenceInLists(controller.getBuffer().getOrders());
-        if (bufferIndex != -1) {
-          downValue(devices_low.size() + 2 + bufferIndex);
-        }
-        series.get(devices_low.size() + 2 + bufferIndex)
-          .add(time, currentVal.get(devices_low.size() + 2 + bufferIndex));
-        //up device
-        for (int i = 0; i < devices_low.size(); i++) {
-          series.get(i + 2).add(time, currentVal.get(i + 2));
-        }
-        upValue(event.getId() + 2);
-        series.get(event.getId() + 2).add(time, currentVal.get(event.getId() + 2));
-      } else if (event.getEventType() == Completed) {
-        //down device
-        for (int i = 0; i < devices_low.size(); i++) {
-          series.get(i + 2).add(time, currentVal.get(i + 2));
-        }
-        downValue(event.getId() + 2);
-        series.get(event.getId() + 2).add(time, currentVal.get(event.getId() + 2));
-        for (int i = devices_low.size() + 2; i < series.size(); i++) {
-          series.get(i).add(time, currentVal.get(i));
-        }
+      for (int i = devices_low.size() + 2, y = 0; i < series.size(); i++, y++) {
+        series.get(i).add(0, buffer_low.get(y));
       }
-      if (canceledOrderCount != controller.getStatistics().getCanceledOrdersCount()) {
-        series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
-        upValue(cancelIndex);
-        series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
-        downValue(cancelIndex);
-        series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
-        canceledOrderCount = controller.getStatistics().getCanceledOrdersCount();
-      }
-      series.get(series.size()).add(time, generator_low);
-      series.get(1).add(time, canceled_low);
     }
+    final Event event = controller.getCurrentEvent();
+    final double time = controller.getCurrentTime();
+    final int generateIndex = series.size();
+    final int cancelIndex = 1;
+    if (event.getEventType() == Generated) {
+      series.get(generateIndex).add(time, currentVal.get(generateIndex));
+      upValue(generateIndex);
+      series.get(generateIndex).add(time, currentVal.get(generateIndex));
+      downValue(generateIndex);
+      series.get(generateIndex).add(time, currentVal.get(generateIndex));
+      //up buffer
+      for (int i = devices_low.size() + 2; i < series.size(); i++) {
+        series.get(i).add(time, currentVal.get(i));
+      }
+      final int bufferIndex = findDifferenceInLists(controller.getBuffer().getOrders());
+      if (bufferIndex != -1) {
+        upValue(devices_low.size() + 2 + bufferIndex);
+      }
+      series.get(devices_low.size() + 2 + bufferIndex)
+        .add(time, currentVal.get(devices_low.size() + 2 + bufferIndex));
+      for (int i = 0; i < devices_low.size(); i++) {
+        series.get(i + 2).add(time, currentVal.get(i + 2));
+      }
+    } else if (event.getEventType() == Unbuffered
+      && event.id != -1) {
+      //down buffer
+      for (int i = devices_low.size() + 2; i < series.size(); i++) {
+        series.get(i).add(time, currentVal.get(i));
+      }
+      final int bufferIndex = findDifferenceInLists(controller.getBuffer().getOrders());
+      if (bufferIndex != -1) {
+        downValue(devices_low.size() + 2 + bufferIndex);
+      }
+      series.get(devices_low.size() + 2 + bufferIndex)
+        .add(time, currentVal.get(devices_low.size() + 2 + bufferIndex));
+      //up device
+      for (int i = 0; i < devices_low.size(); i++) {
+        series.get(i + 2).add(time, currentVal.get(i + 2));
+      }
+      upValue(event.getId() + 2);
+      series.get(event.getId() + 2).add(time, currentVal.get(event.getId() + 2));
+    } else if (event.getEventType() == Completed) {
+      //down device
+      for (int i = 0; i < devices_low.size(); i++) {
+        series.get(i + 2).add(time, currentVal.get(i + 2));
+      }
+      downValue(event.getId() + 2);
+      series.get(event.getId() + 2).add(time, currentVal.get(event.getId() + 2));
+      for (int i = devices_low.size() + 2; i < series.size(); i++) {
+        series.get(i).add(time, currentVal.get(i));
+      }
+    }
+    if (canceledOrderCount != controller.getStatistics().getCanceledOrdersCount()) {
+      series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
+      upValue(cancelIndex);
+      series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
+      downValue(cancelIndex);
+      series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
+      canceledOrderCount = controller.getStatistics().getCanceledOrdersCount();
+    }
+    series.get(series.size()).add(time, generator_low);
+    series.get(1).add(time, canceled_low);
   }
 
   private void upValue(final int lineNum) {

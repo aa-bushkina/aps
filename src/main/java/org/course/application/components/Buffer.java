@@ -39,9 +39,6 @@ public class Buffer {
   }
 
   public void addOrder(@NotNull final Order order) {
-    System.out.println("_________________");
-    System.out.println("Queue " + indexesQueue);
-    System.out.println("Insert index " + insertIndex);
     if (isFull()) {
       if (indexesQueue.isEmpty()) {
         throw new RuntimeException("Indexes Queue can't be empty!");
@@ -49,7 +46,6 @@ public class Buffer {
       insertIndex = indexesQueue.pollFirst();
       Order canceledOrder = orders.get(insertIndex);
       makeStatistics(canceledOrder, order);
-      System.out.println("Cancel order " + canceledOrder.orderId() + "!!!!!!!!!!!!!!!!!!!!!!!");
     } else {
       size++;
       while (orders.get(insertIndex) != null) {
@@ -66,15 +62,9 @@ public class Buffer {
     if (insertIndex == capacity) {
       insertIndex = 0;
     }
-    System.out.println("Add order " + order.orderId());
-    System.out.println("Insert index " + insertIndex);
-    System.out.println("_________________");
   }
 
   public Order getOrder() {
-    System.out.println("_________________");
-    System.out.println("Queue " + indexesQueue);
-    System.out.println("Fetch index " + fetchIndex);
     if (isEmpty()) {
       throw new RuntimeException("Buffer is empty!");
     }
@@ -87,9 +77,6 @@ public class Buffer {
         fetchIndex = 0;
       }
       size--;
-      System.out.println("Get order " + order.orderId());
-      System.out.println("Fetch index " + fetchIndex);
-      System.out.println("_________________");
       return order;
     }
     Order order;
@@ -98,7 +85,6 @@ public class Buffer {
     if (fetchIndex == capacity) {
       fetchIndex = 0;
     }
-    System.out.println("Fetch index " + fetchIndex);
     while (fetchIndex != currentIndex) {
       if (orders.get(fetchIndex) != null) {
         order = orders.get(fetchIndex);
@@ -108,9 +94,7 @@ public class Buffer {
         if (fetchIndex == capacity) {
           fetchIndex = 0;
         }
-        System.out.println("Fetch index " + fetchIndex);
         size--;
-        System.out.println("_________________");
         return order;
       }
       fetchIndex++;

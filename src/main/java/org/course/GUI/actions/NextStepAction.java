@@ -20,17 +20,21 @@ public class NextStepAction extends AbstractAction {
   private final DefaultTableModel resultsTable;
   @NotNull
   private final DefaultTableModel devicesTable;
+  @NotNull
+  private final Waveform waveform;
   public static Event event = null;
   static double time = 0;
 
   public NextStepAction(@NotNull final Controller controller,
                         @NotNull final DefaultTableModel bufferTable,
                         @NotNull final DefaultTableModel resultsTable,
-                        @NotNull final DefaultTableModel devicesTable) {
+                        @NotNull final DefaultTableModel devicesTable,
+                        @NotNull final Waveform waveform) {
     this.controller = controller;
     this.bufferTable = bufferTable;
     this.resultsTable = resultsTable;
     this.devicesTable = devicesTable;
+    this.waveform = waveform;
   }
 
   @Override
@@ -39,7 +43,7 @@ public class NextStepAction extends AbstractAction {
       bufferTable.setValueAt("", i, 1);
       bufferTable.setValueAt("", i, 3);
     }
-
+    controller.stepMode();
     event = controller.getCurrentEvent();
     time = controller.getCurrentTime();
 
@@ -76,5 +80,7 @@ public class NextStepAction extends AbstractAction {
       event.orderId,
       controller.getStatistics().getCompletedOrdersCount(),
       controller.getStatistics().getCanceledOrdersCount()});
+
+    waveform.actionPerformed(e);
   }
 }
