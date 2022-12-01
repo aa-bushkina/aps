@@ -18,18 +18,22 @@ public class ResultsFrame extends CustomFrame {
 
   public void start() {
     currentFrame = createFrame("Auto mode");
-    String[] columnNames = {"Tasks count", "Failure probability", "Total time in system",
-      "Time in buffer", "Buffer dispersion", "Maintenance dispersion"};
+    String[] columnNames = {"Tasks count", "Failure probability", "Time in system",
+      "Time in buffer", "Time in device", "Buffer dispersion", "Device dispersion", "Efficient"};
 
-    String[][] data = new String[Controller.statistics.getClientsCount()][6];
+    String[][] data = new String[Controller.statistics.getClientsCount()][8];
     int i = 0;
     for (ClientStatistics s : controller.getStatistics().getClientsStats()) {
       data[i][0] = String.valueOf(s.getGeneratedTasksCount());
       data[i][1] = String.valueOf((double) s.getCanceledTasksCount() / s.getGeneratedTasksCount());
-      data[i][2] = String.valueOf(s.getTotalTime());
+      data[i][2] = String.valueOf(s.getTotalTime() / s.getGeneratedTasksCount());
       data[i][3] = String.valueOf(s.getTotalBufferedTime());
-      data[i][4] = String.valueOf(s.getBufferDispersion());
-      data[i][5] = String.valueOf(s.getTotalDispersion());
+      data[i][4] = String.valueOf(s.getTotalDeviceTime());
+      data[i][5] = String.valueOf(s.getBufferDispersion());
+      data[i][6] = String.valueOf(s.getDeviceDispersion());
+      if (i < Controller.statistics.getDevicesCount())
+        data[i][7] = String.valueOf(
+          Controller.statistics.getDevicesTime().get(i) / s.getTotalTime());
       i++;
     }
     JTable table = new JTable(data, columnNames);

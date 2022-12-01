@@ -22,6 +22,7 @@ public class Statistics {
   private int totalOrdersCount;
   private int completedOrdersCount;
   private double totalTime;
+  private ArrayList<Double> devicesTime;
   private ArrayList<ClientStatistics> clientsStats;
 
   private Statistics(double totalTime, int devicesCount, int clientsCount) {
@@ -31,6 +32,10 @@ public class Statistics {
     this.bufferSize = sizeOfBuffer;
     this.totalOrdersCount = 0;
     this.completedOrdersCount = 0;
+    this.devicesTime = new ArrayList<>(this.devicesCount);
+    for (int i = 0; i < this.devicesCount; i++) {
+      devicesTime.add(i, 0.0);
+    }
     this.clientsStats = new ArrayList<>(this.clientsCount);
     for (int i = 0; i < this.clientsCount; i++) {
       clientsStats.add(i, new ClientStatistics());

@@ -37,6 +37,8 @@ public class Device {
     statistics.taskCompleted(currentOrder.clientId(),
       currentTime - orderStartTime,
       currentTime - orderStartTime);
+    statistics.getClientsStats().get(currentOrder.clientId()).addDeviceTime(currentTime - orderStartTime);
+    statistics.getDevicesTime().set(deviceId, currentTime - orderStartTime);
     currentOrder = null;
     orderStartTime = currentTime;
   }
