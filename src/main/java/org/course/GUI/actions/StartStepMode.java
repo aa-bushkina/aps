@@ -12,32 +12,32 @@ import java.util.ArrayList;
 
 
 public class StartStepMode extends AbstractAction {
-  private final ArrayList<JTextField> startDataFields;
+  private final ArrayList<JTextField> inputFields;
   @NotNull
   private final JFrame prevFrame;
 
   public StartStepMode(@NotNull final JFrame prevFrame, final ArrayList<JTextField> array) {
     this.prevFrame = prevFrame;
-    this.startDataFields = array;
+    this.inputFields = array;
   }
 
   @Override
   public void actionPerformed(@NotNull final ActionEvent e) {
-    Statistics.countOfRestaurantDevices = Integer.parseInt(startDataFields.get(0).getText());
-    Statistics.countOfClients = Integer.parseInt(startDataFields.get(1).getText());
-    Statistics.countOfOrders = Integer.parseInt(startDataFields.get(2).getText());
-    Statistics.sizeOfBuffer = Integer.parseInt(startDataFields.get(3).getText());
-    Statistics.minimum = Double.parseDouble(startDataFields.get(4).getText());
-    Statistics.maximum = Double.parseDouble(startDataFields.get(5).getText());
-    Statistics.lambda = Double.parseDouble(startDataFields.get(6).getText());
+    Statistics.countOfDevices = Integer.parseInt(inputFields.get(0).getText());
+    Statistics.countOfClients = Integer.parseInt(inputFields.get(1).getText());
+    Statistics.countOfOrders = Integer.parseInt(inputFields.get(2).getText());
+    Statistics.sizeOfBuffer = Integer.parseInt(inputFields.get(3).getText());
+    Statistics.minimum = Double.parseDouble(inputFields.get(4).getText());
+    Statistics.maximum = Double.parseDouble(inputFields.get(5).getText());
+    Statistics.lambda = Double.parseDouble(inputFields.get(6).getText());
     createStepModeFrame();
   }
 
   private void createStepModeFrame() {
     prevFrame.setVisible(false);
-    Controller controller = new Controller();
-    Waveform waveform = new Waveform(controller);
-    StepModeFrame newFrame = new StepModeFrame(controller, waveform);
+    final Controller controller = new Controller();
+    final Waveform waveform = new Waveform(controller);
+    final StepModeFrame newFrame = new StepModeFrame(controller, waveform);
     newFrame.start();
   }
 }

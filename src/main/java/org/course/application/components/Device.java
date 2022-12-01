@@ -16,8 +16,7 @@ public class Device {
   private double orderStartTime;
   private final Statistics statistics;
 
-  public Device(final int deviceId,
-                @NotNull final Statistics statistics) {
+  public Device(final int deviceId, @NotNull final Statistics statistics) {
     this.deviceId = deviceId;
     this.orderStartTime = 0;
     this.currentOrder = null;
@@ -35,11 +34,9 @@ public class Device {
 
   public void release(final double currentTime) {
     final double timeOnDevice = currentTime - orderStartTime;
-    statistics.taskCompleted(currentOrder.clientId(),
-      timeOnDevice,
-      timeOnDevice);
-    statistics.addDeviceTime(deviceId, timeOnDevice);
-    statistics.getClientsStats().get(currentOrder.clientId()).addDeviceTime(timeOnDevice);
+    statistics.taskCompleted(currentOrder.clientId(), timeOnDevice, timeOnDevice);
+    statistics.addDeviceByClientTime(currentOrder.clientId(), timeOnDevice);
+    statistics.addEachDeviceTime(deviceId, timeOnDevice);
     currentOrder = null;
     orderStartTime = currentTime;
   }

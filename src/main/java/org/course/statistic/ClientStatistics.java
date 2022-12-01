@@ -4,49 +4,51 @@ import lombok.Getter;
 
 @Getter
 public class ClientStatistics {
-  private int generatedTasksCount;
-  private int canceledTasksCount;
+  private int generatedOrdersCount;
+  private int canceledOrdersCount;
   private double totalTime;
-  private double totalBufferedTime;
-  private double totalDeviceTime;
-  private double squaredTotalBufferedTime;
-  private double squaredTotalDeviceTime;
+  private double totalOnBufferTime;
+  private double totalOnDeviceTime;
+  private double squaredTotalOnBufferTime;
+  private double squaredTotalOnDeviceTime;
 
   public ClientStatistics() {
-    generatedTasksCount = 0;
-    canceledTasksCount = 0;
+    generatedOrdersCount = 0;
+    canceledOrdersCount = 0;
     totalTime = 0;
-    totalBufferedTime = 0;
-    squaredTotalBufferedTime = 0;
+    totalOnBufferTime = 0;
+    totalOnDeviceTime = 0;
+    squaredTotalOnBufferTime = 0;
+    squaredTotalOnDeviceTime = 0;
   }
 
   public void incrementGeneratedTask() {
-    generatedTasksCount++;
+    generatedOrdersCount++;
   }
 
   public void incrementCanceledTask() {
-    canceledTasksCount++;
+    canceledOrdersCount++;
   }
 
-  public void addTime(double time) {
+  public void addTotalTime(final double time) {
     totalTime += time;
   }
 
-  public void addBufferedTime(final double time) {
-    totalBufferedTime += time;
-    squaredTotalBufferedTime += time * time;
+  public void addOnBufferTime(final double time) {
+    totalOnBufferTime += time;
+    squaredTotalOnBufferTime += time * time;
   }
 
-  public void addDeviceTime(final double time) {
-    totalDeviceTime += time;
-    squaredTotalDeviceTime += time * time;
+  public void addOnDeviceTime(final double time) {
+    totalOnDeviceTime += time;
+    squaredTotalOnDeviceTime += time * time;
   }
 
-  public double getBufferDispersion() {
-    return (squaredTotalBufferedTime / generatedTasksCount - Math.pow(totalBufferedTime / generatedTasksCount, 2));
+  public double getOnBufferDispersion() {
+    return (squaredTotalOnBufferTime / generatedOrdersCount - Math.pow(totalOnBufferTime / generatedOrdersCount, 2));
   }
 
-  public double getDeviceDispersion() {
-    return (squaredTotalDeviceTime / generatedTasksCount - Math.pow(totalDeviceTime / generatedTasksCount, 2));
+  public double getOnDeviceDispersion() {
+    return (squaredTotalOnDeviceTime / generatedOrdersCount - Math.pow(totalOnDeviceTime / generatedOrdersCount, 2));
   }
 }

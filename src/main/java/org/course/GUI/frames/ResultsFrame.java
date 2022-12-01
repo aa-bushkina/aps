@@ -19,21 +19,21 @@ public class ResultsFrame extends CustomFrame {
   public void start() {
     currentFrame = createFrame("Auto mode");
     String[] columnNames = {"Tasks count", "Failure probability", "Time in system",
-      "Time in buffer", "Time in device", "Buffer dispersion", "Device dispersion", "Efficient"};
+      "Time in buffer", "Time in device", "Buffer dispersion", "Device dispersion", "Devises efficient"};
 
     String[][] data = new String[Controller.statistics.getClientsCount()][8];
     int i = 0;
     for (ClientStatistics clientStat : controller.getStatistics().getClientsStats()) {
-      data[i][0] = String.valueOf(clientStat.getGeneratedTasksCount());
-      data[i][1] = String.valueOf((double) clientStat.getCanceledTasksCount() / clientStat.getGeneratedTasksCount());
-      data[i][2] = String.valueOf(clientStat.getTotalTime() / clientStat.getGeneratedTasksCount());
-      data[i][3] = String.valueOf(clientStat.getTotalBufferedTime() / clientStat.getGeneratedTasksCount());
-      data[i][4] = String.valueOf(clientStat.getTotalDeviceTime() / clientStat.getGeneratedTasksCount());
-      data[i][5] = String.valueOf(clientStat.getBufferDispersion());
-      data[i][6] = String.valueOf(clientStat.getDeviceDispersion());
+      data[i][0] = String.valueOf(clientStat.getGeneratedOrdersCount());
+      data[i][1] = String.valueOf((double) clientStat.getCanceledOrdersCount() / clientStat.getGeneratedOrdersCount());
+      data[i][2] = String.valueOf(clientStat.getTotalTime() / clientStat.getGeneratedOrdersCount());
+      data[i][3] = String.valueOf(clientStat.getTotalOnBufferTime() / clientStat.getGeneratedOrdersCount());
+      data[i][4] = String.valueOf(clientStat.getTotalOnDeviceTime() / clientStat.getGeneratedOrdersCount());
+      data[i][5] = String.valueOf(clientStat.getOnBufferDispersion());
+      data[i][6] = String.valueOf(clientStat.getOnDeviceDispersion());
       if (i < Controller.statistics.getDevicesCount())
         data[i][7] = String.valueOf(
-          Controller.statistics.getDevicesTime().get(i) / controller.getCurrentTime());
+          Controller.statistics.getDevicesWorkTime().get(i) / controller.getCurrentTime());
       i++;
     }
     JTable table = new JTable(data, columnNames);

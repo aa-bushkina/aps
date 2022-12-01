@@ -8,7 +8,7 @@ import java.util.ArrayList;
 @Getter
 @Setter
 public class Statistics {
-  public static int countOfRestaurantDevices;
+  public static int countOfDevices;
   public static int countOfClients;
   public static int countOfOrders;
   public static int sizeOfBuffer;
@@ -16,25 +16,23 @@ public class Statistics {
   public static double maximum;
   public static double lambda;
 
-  private int bufferSize;
   private int devicesCount;
   private int clientsCount;
+  private int bufferSize;
   private int totalOrdersCount;
   private int completedOrdersCount;
-  private double totalTime;
-  private ArrayList<Double> devicesTime;
+  private ArrayList<Double> devicesWorkTime;
   private ArrayList<ClientStatistics> clientsStats;
 
-  private Statistics(double totalTime, int devicesCount, int clientsCount) {
+  private Statistics(final int devicesCount, final int clientsCount) {
     this.devicesCount = devicesCount;
     this.clientsCount = clientsCount;
-    this.totalTime = totalTime;
     this.bufferSize = sizeOfBuffer;
     this.totalOrdersCount = 0;
     this.completedOrdersCount = 0;
-    this.devicesTime = new ArrayList<>(this.devicesCount);
+    this.devicesWorkTime = new ArrayList<>(this.devicesCount);
     for (int i = 0; i < this.devicesCount; i++) {
-      devicesTime.add(i, 0.0);
+      devicesWorkTime.add(i, 0.0);
     }
     this.clientsStats = new ArrayList<>(this.clientsCount);
     for (int i = 0; i < this.clientsCount; i++) {
@@ -43,10 +41,10 @@ public class Statistics {
   }
 
   public static Statistics getInstance() {
-    return new Statistics(220000, countOfRestaurantDevices, countOfClients);
+    return new Statistics(countOfDevices, countOfClients);
   }
 
-  public void orderGenerated(int srcId) {
+  public void orderGenerated(final int srcId) {
     clientsStats.get(srcId).incrementGeneratedTask();
     totalOrdersCount++;
   }
@@ -54,23 +52,27 @@ public class Statistics {
   public int getCanceledOrdersCount() {
     int sum = 0;
     for (ClientStatistics stat : clientsStats) {
-      sum += stat.getCanceledTasksCount();
+      sum += stat.getCanceledOrdersCount();
     }
     return sum;
   }
 
-  public void taskCanceled(int srcId, double usedTime) {
-    clientsStats.get(srcId).incrementCanceledTask();
-    taskCompleted(srcId, usedTime, 0);
+  public void taskCanceled(final int clientId, final double usedTime) {
+    clientsStats.get(clientId).incrementCanceledTask();
+    taskCompleted(clientId, usedTime, 0);
   }
 
-  public void taskCompleted(int srcId, double usedTime, double processedTime) {
-    clientsStats.get(srcId).addTime(usedTime);
-    clientsStats.get(srcId).addBufferedTime(usedTime - processedTime);
+  public void taskCompleted(final int clientId, final double usedTime, final double processedTime) {
+    clientsStats.get(clientId).addTotalTime(usedTime);
+    clientsStats.get(clientId).addOnBufferTime(usedTime - processedTime);
     completedOrdersCount++;
   }
 
-  public void addDeviceTime(final int deviceId, final double time) {
-    devicesTime.set(deviceId, devicesTime.get(deviceId) + time);
+  public void addDeviceByClientTime(final int clientId, final double time) {
+    clientsStats.get(clientId).addOnDeviceTime(time);
+  }
+
+  public void addEachDeviceTime(final int deviceId, final double time) {
+    devicesWorkTime.set(deviceId, devicesWorkTime.get(deviceId) + time);
   }
 }
