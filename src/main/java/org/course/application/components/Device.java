@@ -34,11 +34,12 @@ public class Device {
   }
 
   public void release(final double currentTime) {
+    final double timeOnDevice = currentTime - orderStartTime;
     statistics.taskCompleted(currentOrder.clientId(),
-      currentTime - orderStartTime,
-      currentTime - orderStartTime);
-    statistics.getClientsStats().get(currentOrder.clientId()).addDeviceTime(currentTime - orderStartTime);
-    statistics.getDevicesTime().set(deviceId, currentTime - orderStartTime);
+      timeOnDevice,
+      timeOnDevice);
+    statistics.addDeviceTime(deviceId, timeOnDevice);
+    statistics.getClientsStats().get(currentOrder.clientId()).addDeviceTime(timeOnDevice);
     currentOrder = null;
     orderStartTime = currentTime;
   }

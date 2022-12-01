@@ -52,7 +52,7 @@ public class StartFrame extends CustomFrame {
 
     Box string3 = Box.createHorizontalBox();
     string3.add(label3);
-    JTextField text3 = new JTextField("2000", 20);
+    JTextField text3 = new JTextField("500", 20);
     string3.add(text3);
 
     Box string4 = Box.createHorizontalBox();

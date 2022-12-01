@@ -69,4 +69,8 @@ public class Statistics {
     clientsStats.get(srcId).addBufferedTime(usedTime - processedTime);
     completedOrdersCount++;
   }
+
+  public void addDeviceTime(final int deviceId, final double time) {
+    devicesTime.set(deviceId, devicesTime.get(deviceId) + time);
+  }
 }

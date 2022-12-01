@@ -23,27 +23,20 @@ public class ResultsFrame extends CustomFrame {
 
     String[][] data = new String[Controller.statistics.getClientsCount()][8];
     int i = 0;
-    for (ClientStatistics s : controller.getStatistics().getClientsStats()) {
-      data[i][0] = String.valueOf(s.getGeneratedTasksCount());
-      data[i][1] = String.valueOf((double) s.getCanceledTasksCount() / s.getGeneratedTasksCount());
-      data[i][2] = String.valueOf(s.getTotalTime() / s.getGeneratedTasksCount());
-      data[i][3] = String.valueOf(s.getTotalBufferedTime());
-      data[i][4] = String.valueOf(s.getTotalDeviceTime());
-      data[i][5] = String.valueOf(s.getBufferDispersion());
-      data[i][6] = String.valueOf(s.getDeviceDispersion());
+    for (ClientStatistics clientStat : controller.getStatistics().getClientsStats()) {
+      data[i][0] = String.valueOf(clientStat.getGeneratedTasksCount());
+      data[i][1] = String.valueOf((double) clientStat.getCanceledTasksCount() / clientStat.getGeneratedTasksCount());
+      data[i][2] = String.valueOf(clientStat.getTotalTime() / clientStat.getGeneratedTasksCount());
+      data[i][3] = String.valueOf(clientStat.getTotalBufferedTime() / clientStat.getGeneratedTasksCount());
+      data[i][4] = String.valueOf(clientStat.getTotalDeviceTime() / clientStat.getGeneratedTasksCount());
+      data[i][5] = String.valueOf(clientStat.getBufferDispersion());
+      data[i][6] = String.valueOf(clientStat.getDeviceDispersion());
       if (i < Controller.statistics.getDevicesCount())
         data[i][7] = String.valueOf(
-          Controller.statistics.getDevicesTime().get(i) / s.getTotalTime());
+          Controller.statistics.getDevicesTime().get(i) / controller.getCurrentTime());
       i++;
     }
     JTable table = new JTable(data, columnNames);
-
-/*    JPanel buttonPanelWaveform = new JPanel(new CardLayout());
-    JButton buttonWaveform = new JButton(new GetWaveformAction(currentFrame, controller));
-    buttonWaveform.setText("Waveform");
-    buttonPanelWaveform.add(buttonWaveform);
-
-    currentFrame.getContentPane().add(buttonPanelWaveform, BorderLayout.SOUTH);*/
 
     JScrollPane scroll = new JScrollPane(table);
     table.setPreferredScrollableViewportSize(new Dimension(500, 900));
