@@ -25,8 +25,9 @@ public class StepModeFrame extends CustomFrame {
 
   public void start() {
     currentFrame = createFrame("Step mode");
-    String[] bufferTableColumnNames = {"Index", "Insert", "Order", "Fetch"};
 
+    //buffer table
+    String[] bufferTableColumnNames = {"Index", "Insert", "Order", "Fetch"};
     String[][] bufferTableData = new String[Controller.statistics.getBufferSize()][4];
     for (int i = 0; i < controller.getBuffer().getOrders().size(); i++) {
       bufferTableData[i][0] = String.valueOf(i);
@@ -38,6 +39,7 @@ public class StepModeFrame extends CustomFrame {
     DefaultTableModel bufferTableModel = (DefaultTableModel) bufferTable.getModel();
     bufferTable.setMaximumSize(new Dimension(200, 200));
 
+    //device table
     String[] devicesTableColumnNames = {"Index", "Order"};
     String[][] devicesTableData = new String[Controller.statistics.getDevicesCount()][2];
     for (int i = 0; i < Controller.statistics.getDevicesCount(); i++) {
@@ -47,6 +49,7 @@ public class StepModeFrame extends CustomFrame {
     DefaultTableModel devicesTableModel = (DefaultTableModel) devicesTable.getModel();
     devicesTable.setMaximumSize(new Dimension(200, 200));
 
+    //results table
     String[] resultsTableColumnNames = {"Time", "Element", "Action", "Order", "Successful requests", "Canceled requests"};
     String[][] resultsTableData = new String[0][5];
     JTable resultsTable = new JTable(new DefaultTableModel(resultsTableData, resultsTableColumnNames));
@@ -54,6 +57,7 @@ public class StepModeFrame extends CustomFrame {
     resultsTable.getColumnModel().getColumn(0).setMinWidth(150);
     resultsTable.getColumnModel().getColumn(2).setMinWidth(70);
 
+    //buttons
     JPanel buttonPanelNext = new JPanel(new CardLayout());
     JButton buttonNext = new JButton(
       new NextStepAction(controller, bufferTableModel, resultsTableModel, devicesTableModel, waveform));
@@ -77,21 +81,31 @@ public class StepModeFrame extends CustomFrame {
     bottomPanel.add(buttonPanelAuto);
     bottomPanel.add(buttonPanelResults);
 
+    //diagram panel
     JPanel diagramPanel = new JPanel();
     diagramPanel.add(new JScrollPane(waveform.getJPanel()));
 
-    JPanel leftPanel = new JPanel();
-    leftPanel.setLayout(new BoxLayout(leftPanel, BoxLayout.Y_AXIS));
-    leftPanel.add(new JLabel("Buffer"));
-    leftPanel.add(bufferTable);
-    leftPanel.add(Box.createVerticalStrut(50));
-    leftPanel.add(new JLabel("Devices"));
-    leftPanel.add(devicesTable);
+    //buffer panel
+    JPanel bufferPanel = new JPanel();
+    bufferPanel.setLayout(new BoxLayout(bufferPanel, BoxLayout.Y_AXIS));
+    bufferPanel.add(new JLabel("Buffer"));
+    bufferPanel.add(new JScrollPane(bufferTable));
+
+    //devices panel
+    JPanel devicesPanel = new JPanel();
+    devicesPanel.setLayout(new BoxLayout(devicesPanel, BoxLayout.Y_AXIS));
+    devicesPanel.add(new JLabel("Devices"));
+    devicesPanel.add(new JScrollPane(devicesTable));
+
+    JPanel leftTablesPanel = new JPanel();
+    leftTablesPanel.setLayout(new BoxLayout(leftTablesPanel, BoxLayout.X_AXIS));
+    leftTablesPanel.add(bufferPanel);
+    leftTablesPanel.add(devicesPanel);
 
     JPanel leftBigPanel = new JPanel();
     leftBigPanel.setLayout(new BoxLayout(leftBigPanel, BoxLayout.Y_AXIS));
     leftBigPanel.add(new JScrollPane(diagramPanel));
-    leftBigPanel.add(leftPanel);
+    leftBigPanel.add(leftTablesPanel);
 
     JPanel centralPanel = new JPanel();
     centralPanel.setLayout(new GridLayout());
