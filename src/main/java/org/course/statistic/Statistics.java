@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Statistics {
   public static int countOfDevices;
   public static int countOfClients;
-  public static int countOfOrders;
+  public static int workTime;
   public static int sizeOfBuffer;
   public static double minimum;
   public static double maximum;

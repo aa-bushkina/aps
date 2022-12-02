@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 public class Controller {
   public static Statistics statistics = Statistics.getInstance();
-  private final int ordersCount = Statistics.countOfOrders;
+  private final int workTime = Statistics.workTime;
   private Event currentEvent;
   private double currentTime;
 
@@ -55,12 +55,10 @@ public class Controller {
     final int currentId = currentEvent.id;
     currentTime = currentEvent.eventTime;
     if (currentType == Type.Generated) {
-      if (statistics.getTotalOrdersCount() < ordersCount) {
-        List<Event> newEvents = terminal.putOrderToBuffer(currentId, currentTime);
-        if (!events.isEmpty()) {
-          events.addAll(newEvents);
-          events.sort(Event::compare);
-        }
+      List<Event> newEvents = terminal.putOrderToBuffer(currentId, currentTime);
+      if (!events.isEmpty()) {
+        events.addAll(newEvents);
+        events.sort(Event::compare);
       }
     } else if (currentType == Type.Unbuffered) {
       final Event newEvent = distributor.sendOrderToDevice(currentTime, currentEvent);

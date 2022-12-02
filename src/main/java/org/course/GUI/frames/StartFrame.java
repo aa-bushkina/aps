@@ -23,7 +23,7 @@ public class StartFrame extends CustomFrame {
     ArrayList<JLabel> labelsList = new ArrayList<>(elementsCount);
     labelsList.add(0, new JLabel("Devices"));
     labelsList.add(1, new JLabel("Clients"));
-    labelsList.add(2, new JLabel("Orders"));
+    labelsList.add(2, new JLabel("Time"));
     labelsList.add(3, new JLabel("Buffer size"));
     labelsList.add(4, new JLabel("Min application processing time"));
     labelsList.add(5, new JLabel("Max application processing time"));
@@ -32,11 +32,11 @@ public class StartFrame extends CustomFrame {
     ArrayList<JTextField> textList = new ArrayList<>(elementsCount);
     textList.add(new JTextField("3", 10));
     textList.add(new JTextField("20", 10));
-    textList.add(new JTextField("500", 10));
+    textList.add(new JTextField("1000", 10));
     textList.add(new JTextField("4", 10));
     textList.add(new JTextField("0.1", 10));
     textList.add(new JTextField("0.2", 10));
-    textList.add(new JTextField("0.3", 10));
+    textList.add(new JTextField("1", 10));
 
     ArrayList<Box> boxList = new ArrayList<>(elementsCount);
     for (int i = 0; i < elementsCount; i++) {

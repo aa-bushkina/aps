@@ -21,7 +21,7 @@ public class AutoModeAction extends AbstractAction {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    while (Statistics.countOfOrders != controller.getStatistics().getCompletedOrdersCount()) {
+    while (Statistics.workTime > controller.getCurrentTime() || !controller.getEvents().isEmpty()) {
       nextStepAction.actionPerformed(e);
     }
   }
