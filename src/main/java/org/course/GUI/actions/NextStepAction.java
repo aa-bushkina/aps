@@ -72,6 +72,9 @@ public class NextStepAction extends AbstractAction {
     } else {
       element = "П" + event.id;
     }
+    if (event.id == -1) {
+      element = "";
+    }
 
     resultsTable.addRow(new Object[]{
       controller.getCurrentTime(),

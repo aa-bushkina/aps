@@ -12,7 +12,7 @@ public class Client {
 
   public Client(final int clientId) {
     this.clientId = clientId;
-    ordersCount = 0;
+    this.ordersCount = 0;
   }
 
   public double getNextOrderGenerationTime() {
