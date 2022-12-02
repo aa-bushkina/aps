@@ -18,68 +18,34 @@ public class StartFrame extends CustomFrame {
     currentFrame = createFrame("Properties");
     currentFrame.add(panel);
 
-    JLabel label1 = new JLabel("Devices");
-    label1.setPreferredSize(new Dimension(200, 30));
+    final int elementsCount = 7;
 
-    JLabel label2 = new JLabel("Clients");
-    label2.setPreferredSize(new Dimension(200, 30));
+    ArrayList<JLabel> labelsList = new ArrayList<>(elementsCount);
+    labelsList.add(0, new JLabel("Devices"));
+    labelsList.add(1, new JLabel("Clients"));
+    labelsList.add(2, new JLabel("Tasks"));
+    labelsList.add(3, new JLabel("Buffer size"));
+    labelsList.add(4, new JLabel("Min application processing time"));
+    labelsList.add(5, new JLabel("Max application processing time"));
+    labelsList.add(6, new JLabel("Lambda for generation"));
 
-    JLabel label3 = new JLabel("Tasks");
-    label3.setPreferredSize(new Dimension(200, 30));
+    ArrayList<JTextField> textList = new ArrayList<>(elementsCount);
+    textList.add(new JTextField("3", 10));
+    textList.add(new JTextField("20", 10));
+    textList.add(new JTextField("500", 10));
+    textList.add(new JTextField("4", 10));
+    textList.add(new JTextField("0.1", 10));
+    textList.add(new JTextField("0.2", 10));
+    textList.add(new JTextField("0.3", 10));
 
-    JLabel label4 = new JLabel("Buffer size");
-    label4.setPreferredSize(new Dimension(200, 30));
-
-    JLabel label5 = new JLabel("Min application processing time");
-    label5.setPreferredSize(new Dimension(200, 30));
-
-    JLabel label6 = new JLabel("Max application processing time");
-    label6.setPreferredSize(new Dimension(200, 30));
-
-    JLabel label7 = new JLabel("Lambda for generation");
-    label7.setPreferredSize(new Dimension(200, 30));
-
-    final int boxesCount = 7;
-    ArrayList<Box> boxList = new ArrayList<>(boxesCount);
-    for (int i = 0; i < boxesCount; i++) {
+    ArrayList<Box> boxList = new ArrayList<>(elementsCount);
+    for (int i = 0; i < elementsCount; i++) {
+      labelsList.get(i).setPreferredSize(new Dimension(200, 30));
       boxList.add(Box.createHorizontalBox());
+      boxList.get(i).add(labelsList.get(i));
+      boxList.get(i).add(textList.get(i));
+      startDataFields.add(textList.get(i));
     }
-
-    boxList.get(0).add(label1);
-    JTextField text1 = new JTextField("3", 10);
-    boxList.get(0).add(text1);
-
-    boxList.get(1).add(label2);
-    JTextField text2 = new JTextField("20", 10);
-    boxList.get(1).add(text2);
-
-    boxList.get(2).add(label3);
-    JTextField text3 = new JTextField("500", 10);
-    boxList.get(2).add(text3);
-
-    boxList.get(3).add(label4);
-    JTextField text4 = new JTextField("4", 10);
-    boxList.get(3).add(text4);
-
-    boxList.get(4).add(label5);
-    JTextField text5 = new JTextField("0.1", 10);
-    boxList.get(4).add(text5);
-
-    boxList.get(5).add(label6);
-    JTextField text6 = new JTextField("0.2", 10);
-    boxList.get(5).add(text6);
-
-    boxList.get(6).add(label7);
-    JTextField text7 = new JTextField("0.3", 10);
-    boxList.get(6).add(text7);
-
-    startDataFields.add(text1);
-    startDataFields.add(text2);
-    startDataFields.add(text3);
-    startDataFields.add(text4);
-    startDataFields.add(text5);
-    startDataFields.add(text6);
-    startDataFields.add(text7);
 
     final JLabel title = new JLabel("Enter properties:");
 
@@ -88,20 +54,10 @@ public class StartFrame extends CustomFrame {
 
     box.add(Box.createVerticalStrut(100));
     box.add(title);
-    box.add(Box.createVerticalStrut(10));
-    box.add(boxList.get(0));
-    box.add(Box.createVerticalStrut(10));
-    box.add(boxList.get(1));
-    box.add(Box.createVerticalStrut(10));
-    box.add(boxList.get(2));
-    box.add(Box.createVerticalStrut(10));
-    box.add(boxList.get(3));
-    box.add(Box.createVerticalStrut(10));
-    box.add(boxList.get(4));
-    box.add(Box.createVerticalStrut(10));
-    box.add(boxList.get(5));
-    box.add(Box.createVerticalStrut(10));
-    box.add(boxList.get(6));
+    for (Box value : boxList) {
+      box.add(Box.createVerticalStrut(10));
+      box.add(value);
+    }
     box.add(Box.createVerticalStrut(25));
     box.add(button);
     panel.add(box);
