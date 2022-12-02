@@ -10,9 +10,9 @@ import java.util.List;
 
 public class Terminal {
   @NotNull
-  final private Buffer buffer;
+  private final Buffer buffer;
   @NotNull
-  List<Client> clients;
+  private final List<Client> clients;
   @NotNull
   private final Statistics statistics;
 

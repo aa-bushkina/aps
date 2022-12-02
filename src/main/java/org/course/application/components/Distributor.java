@@ -11,10 +11,13 @@ import java.util.List;
 
 @Getter
 public class Distributor {
+  @NotNull
   private final List<Device> devices;
+  @NotNull
   private final Buffer buffer;
-  private int currentIndex;
+  @NotNull
   private final Statistics statistics;
+  private int currentIndex;
 
   public Distributor(@NotNull final Buffer buffer,
                      @NotNull final List<Device> devices,
@@ -43,15 +46,14 @@ public class Distributor {
     return null;
   }
 
-  public boolean findFreeDeviceIndex() {
+  public void findFreeDeviceIndex() {
     currentIndex = 0;
     while (!devices.get(currentIndex).isFree()) {
       currentIndex++;
       if (currentIndex == statistics.getDevicesCount()) {
         currentIndex = 0;
-        return false;
+        return;
       }
     }
-    return true;
   }
 }
