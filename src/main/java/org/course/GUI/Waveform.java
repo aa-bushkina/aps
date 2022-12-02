@@ -35,7 +35,7 @@ public class Waveform extends JPanel implements ActionListener {
   private HashMap<Integer, Double> currentVal;
   private HashMap<Integer, XYSeries> series;
   private int canceledOrderCount = 0;
-  final ArrayList<Order> bufferList;
+  ArrayList<Order> bufferList;
   private boolean ifFirstIteration = true;
 
   public JPanel getJPanel() {
@@ -111,7 +111,7 @@ public class Waveform extends JPanel implements ActionListener {
     if (ifFirstIteration) {
       ifFirstIteration = false;
       series.get(1).add(0, canceled_low);
-      series.get(series.size()).add(controller.getCurrentTime(), generator_low);
+      series.get(series.size()).add(0, generator_low);
       for (int i = 0; i < devices_low.size(); i++) {
         series.get(i + 2).add(0, devices_low.get(i));
       }
@@ -124,21 +124,35 @@ public class Waveform extends JPanel implements ActionListener {
     final int generateIndex = series.size();
     final int cancelIndex = 1;
     if (event.getEventType() == Generated) {
+      //generated clock
       series.get(generateIndex).add(time, currentVal.get(generateIndex));
       upValue(generateIndex);
       series.get(generateIndex).add(time, currentVal.get(generateIndex));
       downValue(generateIndex);
       series.get(generateIndex).add(time, currentVal.get(generateIndex));
-      //up buffer
+      //up buffer or canceled clock
       for (int i = devices_low.size() + 2; i < series.size(); i++) {
         series.get(i).add(time, currentVal.get(i));
       }
       final int bufferIndex = findDifferenceInLists(controller.getBuffer().getOrders());
+      if (canceledOrderCount != controller.getStatistics().getCanceledOrdersCount()) {
+        findDifferenceInLists(controller.getBuffer().getOrders());
+        series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
+        upValue(cancelIndex);
+        series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
+        downValue(cancelIndex);
+        series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
+        canceledOrderCount = controller.getStatistics().getCanceledOrdersCount();
+        downValue(devices_low.size() + 2 + bufferIndex);
+        series.get(devices_low.size() + 2 + bufferIndex)
+          .add(time, currentVal.get(devices_low.size() + 2 + bufferIndex));
+      }
       if (bufferIndex != -1) {
         upValue(devices_low.size() + 2 + bufferIndex);
+        series.get(devices_low.size() + 2 + bufferIndex)
+          .add(time, currentVal.get(devices_low.size() + 2 + bufferIndex));
       }
-      series.get(devices_low.size() + 2 + bufferIndex)
-        .add(time, currentVal.get(devices_low.size() + 2 + bufferIndex));
+      //devices
       for (int i = 0; i < devices_low.size(); i++) {
         series.get(i + 2).add(time, currentVal.get(i + 2));
       }
@@ -170,14 +184,6 @@ public class Waveform extends JPanel implements ActionListener {
       for (int i = devices_low.size() + 2; i < series.size(); i++) {
         series.get(i).add(time, currentVal.get(i));
       }
-    }
-    if (canceledOrderCount != controller.getStatistics().getCanceledOrdersCount()) {
-      series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
-      upValue(cancelIndex);
-      series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
-      downValue(cancelIndex);
-      series.get(cancelIndex).add(time, currentVal.get(cancelIndex));
-      canceledOrderCount = controller.getStatistics().getCanceledOrdersCount();
     }
     series.get(series.size()).add(time, generator_low);
     series.get(1).add(time, canceled_low);
