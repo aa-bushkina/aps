@@ -18,7 +18,7 @@ public class ResultsFrame extends CustomFrame {
 
   public void start() {
     currentFrame = createFrame("Auto mode");
-    String[] columnNames = {"Tasks count", "Failure probability", "Time in system",
+    String[] columnNames = {"Orders count", "Failure probability", "Time in system",
       "Time in buffer", "Time in device", "Buffer dispersion", "Device dispersion", "Devises efficient"};
 
     String[][] data = new String[Controller.statistics.getClientsCount()][8];
@@ -41,7 +41,6 @@ public class ResultsFrame extends CustomFrame {
     JScrollPane scroll = new JScrollPane(table);
     table.setPreferredScrollableViewportSize(new Dimension(500, 900));
     currentFrame.getContentPane().add(scroll);
-    currentFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     currentFrame.revalidate();
   }
 }

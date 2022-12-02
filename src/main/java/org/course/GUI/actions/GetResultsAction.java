@@ -9,9 +9,9 @@ import java.awt.event.ActionEvent;
 
 public class GetResultsAction extends AbstractAction {
   @NotNull
-  final private JFrame prevFrame;
+  final private Controller controller;
   @NotNull
-  final Controller controller;
+  final private JFrame prevFrame;
 
   public GetResultsAction(@NotNull final JFrame frame,
                           @NotNull final Controller controller) {

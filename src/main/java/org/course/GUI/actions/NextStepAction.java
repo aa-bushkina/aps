@@ -12,6 +12,8 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 
 public class NextStepAction extends AbstractAction {
+  public static Event event = null;
+  static double time = 0;
   @NotNull
   private final Controller controller;
   @NotNull
@@ -22,8 +24,6 @@ public class NextStepAction extends AbstractAction {
   private final DefaultTableModel devicesTable;
   @NotNull
   private final Waveform waveform;
-  public static Event event = null;
-  static double time = 0;
 
   public NextStepAction(@NotNull final Controller controller,
                         @NotNull final DefaultTableModel bufferTable,

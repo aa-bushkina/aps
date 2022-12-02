@@ -11,10 +11,10 @@ import java.util.Random;
 @Getter
 @Setter
 public class Device {
+  private final Statistics statistics;
   private int deviceId;
   private Order currentOrder;
   private double orderStartTime;
-  private final Statistics statistics;
 
   public Device(final int deviceId, @NotNull final Statistics statistics) {
     this.deviceId = deviceId;

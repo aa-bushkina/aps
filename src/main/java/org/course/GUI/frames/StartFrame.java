@@ -23,7 +23,7 @@ public class StartFrame extends CustomFrame {
     ArrayList<JLabel> labelsList = new ArrayList<>(elementsCount);
     labelsList.add(0, new JLabel("Devices"));
     labelsList.add(1, new JLabel("Clients"));
-    labelsList.add(2, new JLabel("Tasks"));
+    labelsList.add(2, new JLabel("Orders"));
     labelsList.add(3, new JLabel("Buffer size"));
     labelsList.add(4, new JLabel("Min application processing time"));
     labelsList.add(5, new JLabel("Max application processing time"));
@@ -61,7 +61,6 @@ public class StartFrame extends CustomFrame {
     box.add(Box.createVerticalStrut(25));
     box.add(button);
     panel.add(box);
-    currentFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     currentFrame.revalidate();
   }
 }

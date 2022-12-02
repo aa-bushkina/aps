@@ -12,11 +12,11 @@ import java.util.LinkedList;
 public class Buffer {
   @NotNull
   private final ArrayList<Order> orders;
+  private final int capacity;
+  LinkedList<Integer> indexesQueue;
   private int insertIndex;
   private int fetchIndex;
-  private final int capacity;
   private int size;
-  LinkedList<Integer> indexesQueue;
 
   public Buffer(final int capacity) {
     this.capacity = capacity;

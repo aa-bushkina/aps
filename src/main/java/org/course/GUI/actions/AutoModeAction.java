@@ -1,6 +1,5 @@
 package org.course.GUI.actions;
 
-import org.course.GUI.Waveform;
 import org.course.application.Controller;
 import org.course.statistic.Statistics;
 import org.jetbrains.annotations.NotNull;
