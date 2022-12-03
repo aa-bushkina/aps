@@ -11,10 +11,10 @@ import java.util.Random;
 @Getter
 @Setter
 public class Device {
+  private final Statistics statistics;
   private int deviceId;
   private Order currentOrder;
   private double orderStartTime;
-  private final Statistics statistics;
 
   public Device(final int deviceId, @NotNull final Statistics statistics) {
     this.deviceId = deviceId;
@@ -34,7 +34,7 @@ public class Device {
 
   public void release(final double currentTime) {
     final double timeOnDevice = currentTime - orderStartTime;
-    statistics.taskCompleted(currentOrder.clientId(), timeOnDevice, timeOnDevice);
+    statistics.orderCompleted(currentOrder.clientId(), timeOnDevice, timeOnDevice);
     statistics.addDeviceByClientTime(currentOrder.clientId(), timeOnDevice);
     statistics.addEachDeviceTime(deviceId, timeOnDevice);
     currentOrder = null;

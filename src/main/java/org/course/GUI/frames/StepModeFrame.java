@@ -120,7 +120,6 @@ public class StepModeFrame extends CustomFrame {
     currentFrame.getContentPane().setLayout(new CardLayout());
     currentFrame.getContentPane().add(mainPanel, BorderLayout.CENTER);
 
-    currentFrame.setExtendedState(JFrame.MAXIMIZED_BOTH);
     currentFrame.revalidate();
   }
 }

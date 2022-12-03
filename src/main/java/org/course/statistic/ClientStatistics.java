@@ -22,11 +22,11 @@ public class ClientStatistics {
     squaredTotalOnDeviceTime = 0;
   }
 
-  public void incrementGeneratedTask() {
+  public void incrementGeneratedOrders() {
     generatedOrdersCount++;
   }
 
-  public void incrementCanceledTask() {
+  public void incrementCanceledOrders() {
     canceledOrdersCount++;
   }
 

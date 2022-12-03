@@ -1,6 +1,5 @@
 package org.course.GUI.actions;
 
-import org.course.GUI.Waveform;
 import org.course.application.Controller;
 import org.course.statistic.Statistics;
 import org.jetbrains.annotations.NotNull;
@@ -22,7 +21,7 @@ public class AutoModeAction extends AbstractAction {
 
   @Override
   public void actionPerformed(ActionEvent e) {
-    while (Statistics.countOfOrders != controller.getStatistics().getCompletedOrdersCount()) {
+    while (Statistics.workTime > controller.getCurrentTime() && !controller.getEvents().isEmpty()) {
       nextStepAction.actionPerformed(e);
     }
   }

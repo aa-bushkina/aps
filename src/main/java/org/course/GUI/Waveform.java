@@ -26,6 +26,7 @@ import static org.course.application.events.Type.*;
 @Getter
 @Setter
 public class Waveform extends JPanel implements ActionListener {
+  ArrayList<Order> bufferList;
   private Controller controller;
   private JPanel chartPanel;
   private int generator_low;
@@ -35,12 +36,7 @@ public class Waveform extends JPanel implements ActionListener {
   private HashMap<Integer, Double> currentVal;
   private HashMap<Integer, XYSeries> series;
   private int canceledOrderCount = 0;
-  ArrayList<Order> bufferList;
   private boolean ifFirstIteration = true;
-
-  public JPanel getJPanel() {
-    return chartPanel;
-  }
 
   public Waveform(@NotNull final Controller controller) {
     this.controller = controller;
@@ -105,6 +101,10 @@ public class Waveform extends JPanel implements ActionListener {
     content.add(chartPanel);
     chartPanel.setPreferredSize(new Dimension(2000, 400));
     this.chartPanel = content;
+  }
+
+  public JPanel getJPanel() {
+    return chartPanel;
   }
 
   public void actionPerformed(final ActionEvent e) {

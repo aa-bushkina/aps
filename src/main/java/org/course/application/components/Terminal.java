@@ -6,6 +6,7 @@ import org.course.application.events.Type;
 import org.course.statistic.Statistics;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Terminal {
@@ -31,10 +32,12 @@ public class Terminal {
   public List<Event> putOrderToBuffer(final int currentId, final double currentTime) {
     final Order currentOrder = receiveOrder(currentId, currentTime);
     buffer.addOrder(currentOrder);
-    List<Event> events = List.of(
-      new Event(Type.Unbuffered, currentTime, currentOrder.orderId()),
-      new Event(Type.Generated, currentTime + clients.get(currentId).getNextOrderGenerationTime(),
-        null, currentId));
+    List<Event> events = new ArrayList<>();
+    events.add(new Event(Type.Unbuffered, currentTime, currentOrder.orderId()));
+    final double nextOrderTime = currentTime + clients.get(currentId).getNextOrderGenerationTime();
+    if (nextOrderTime < Statistics.workTime) {
+      events.add(new Event(Type.Generated, nextOrderTime, null, currentId));
+    }
     statistics.orderGenerated(currentId);
     return events;
   }

@@ -25,7 +25,7 @@ public class StartStepMode extends AbstractAction {
   public void actionPerformed(@NotNull final ActionEvent e) {
     Statistics.countOfDevices = Integer.parseInt(inputFields.get(0).getText());
     Statistics.countOfClients = Integer.parseInt(inputFields.get(1).getText());
-    Statistics.countOfOrders = Integer.parseInt(inputFields.get(2).getText());
+    Statistics.workTime = Integer.parseInt(inputFields.get(2).getText());
     Statistics.sizeOfBuffer = Integer.parseInt(inputFields.get(3).getText());
     Statistics.minimum = Double.parseDouble(inputFields.get(4).getText());
     Statistics.maximum = Double.parseDouble(inputFields.get(5).getText());
