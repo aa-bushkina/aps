@@ -12,13 +12,13 @@ import java.util.List;
 @Getter
 public class Controller {
   public static Statistics statistics = Statistics.getInstance();
-  private final int workTime = Statistics.workTime;
+  private final double workTime = Statistics.workTime;
   private Event currentEvent;
   private double currentTime;
 
   private final Buffer buffer;
   private final Terminal terminal;
-  private final Distributor distributor;
+  private final Distributer distributer;
   private final ArrayList<Client> clients;
   private final ArrayList<Device> devices;
   private ArrayList<Event> events;
@@ -40,7 +40,7 @@ public class Controller {
     for (int i = 0; i < statistics.getDevicesCount(); i++) {
       devices.add(new Device(i, statistics));
     }
-    distributor = new Distributor(buffer, devices, statistics);
+    distributer = new Distributer(buffer, devices, statistics);
     clients = new ArrayList<>(statistics.getClientsCount());
     for (int i = 0; i < statistics.getClientsCount(); i++) {
       clients.add(new Client(i));
@@ -49,7 +49,7 @@ public class Controller {
     initEvents();
   }
 
-  public Event stepMode() {
+  public void stepMode() {
     currentEvent = events.remove(0);
     final Type currentType = currentEvent.eventType;
     final int currentId = currentEvent.id;
@@ -61,7 +61,7 @@ public class Controller {
         events.sort(Event::compare);
       }
     } else if (currentType == Type.Unbuffered) {
-      final Event newEvent = distributor.sendOrderToDevice(currentTime, currentEvent);
+      final Event newEvent = distributer.sendOrderToDevice(currentTime, currentEvent);
       if (newEvent != null) {
         events.add(newEvent);
         events.sort(Event::compare);
@@ -71,7 +71,6 @@ public class Controller {
       events.add(new Event(Type.Unbuffered, currentTime, null));
       events.sort(Event::compare);
     }
-    return currentEvent;
   }
 
   public Statistics getStatistics() {

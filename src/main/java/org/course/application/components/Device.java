@@ -34,7 +34,7 @@ public class Device {
 
   public void release(final double currentTime) {
     final double timeOnDevice = currentTime - orderStartTime;
-    statistics.taskCompleted(currentOrder.clientId(), timeOnDevice, timeOnDevice);
+    statistics.orderCompleted(currentOrder.clientId(), timeOnDevice, timeOnDevice);
     statistics.addDeviceByClientTime(currentOrder.clientId(), timeOnDevice);
     statistics.addEachDeviceTime(deviceId, timeOnDevice);
     currentOrder = null;

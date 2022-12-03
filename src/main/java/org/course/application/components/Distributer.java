@@ -10,7 +10,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.List;
 
 @Getter
-public class Distributor {
+public class Distributer {
   @NotNull
   private final List<Device> devices;
   @NotNull
@@ -19,7 +19,7 @@ public class Distributor {
   private final Statistics statistics;
   private int currentIndex;
 
-  public Distributor(@NotNull final Buffer buffer,
+  public Distributer(@NotNull final Buffer buffer,
                      @NotNull final List<Device> devices,
                      @NotNull final Statistics statistics) {
     this.buffer = buffer;

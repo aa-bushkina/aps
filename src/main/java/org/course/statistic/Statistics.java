@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public class Statistics {
   public static int countOfDevices;
   public static int countOfClients;
-  public static int workTime;
+  public static double workTime;
   public static int sizeOfBuffer;
   public static double minimum;
   public static double maximum;
@@ -44,8 +44,8 @@ public class Statistics {
     return new Statistics(countOfDevices, countOfClients);
   }
 
-  public void orderGenerated(final int srcId) {
-    clientsStats.get(srcId).incrementGeneratedTask();
+  public void orderGenerated(final int clientId) {
+    clientsStats.get(clientId).incrementGeneratedOrders();
     totalOrdersCount++;
   }
 
@@ -57,12 +57,12 @@ public class Statistics {
     return sum;
   }
 
-  public void taskCanceled(final int clientId, final double usedTime) {
-    clientsStats.get(clientId).incrementCanceledTask();
-    taskCompleted(clientId, usedTime, 0);
+  public void orderCanceled(final int clientId, final double usedTime) {
+    clientsStats.get(clientId).incrementCanceledOrders();
+    orderCompleted(clientId, usedTime, 0);
   }
 
-  public void taskCompleted(final int clientId, final double usedTime, final double processedTime) {
+  public void orderCompleted(final int clientId, final double usedTime, final double processedTime) {
     clientsStats.get(clientId).addTotalTime(usedTime);
     clientsStats.get(clientId).addOnBufferTime(usedTime - processedTime);
     completedOrdersCount++;

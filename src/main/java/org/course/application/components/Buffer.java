@@ -106,7 +106,7 @@ public class Buffer {
   }
 
   private void makeStatistics(@NotNull final Order canceledOrder, @NotNull final Order order) {
-    Controller.statistics.taskCanceled(canceledOrder.clientId(),
+    Controller.statistics.orderCanceled(canceledOrder.clientId(),
       order.startTime() - canceledOrder.startTime());
   }
 }
