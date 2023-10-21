@@ -18,3 +18,4 @@ gradle-app.setting
 /controller/build/classes/java/main/
 /models/build/
 /models/build/classes/java/main/
+bin
