@@ -56,7 +56,7 @@ public class Controller {
     currentTime = currentEvent.eventTime;
     if (currentType == Type.Generated) {
       List<Event> newEvents = terminal.putOrderToBuffer(currentId, currentTime);
-      if (!events.isEmpty()) {
+      if (!newEvents.isEmpty()) {
         events.addAll(newEvents);
         events.sort(Event::compare);
       }
